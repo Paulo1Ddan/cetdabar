@@ -1,238 +1,510 @@
-<?php 
-    namespace Class\Model\User;
+<?php
 
-    use Class\Model;
-    use Class\DB\Sql;
-    use Class\Mailer;
+namespace Class\Model\User;
 
-     class User extends Model{
-        public static function login($login, $pass)
-        {
-            $sql = new Sql();
-            $result = $sql->select("SELECT * FROM user WHERE emailuser = :login", array(
-                ":login" => $login
-            ));
+use Class\Model;
+use Class\DB\Sql;
+use Class\Mailer;
 
-            if(count($result) === 0){
+class User extends Model
+{
+    
+    public static function login($login, $pass)
+    {
+        $sql = new Sql();
+        $result = $sql->select("SELECT * FROM user WHERE emailuser = :login", array(
+            ":login" => $login
+        ));
+
+        if (count($result) === 0) {
+            $_SESSION['alert'] = "<script>alert('Usuario ou senha inválida'), history.back()</script>";
+            return false;
+        } else {
+            $data = $result[0];
+            if (password_verify($pass, $data['passuser'])) {
+                $user = new User();
+                $user->setData($data);
+                $_SESSION['user'] = $user->getData();
+                $_SESSION['logado'] = true;
+                $_SESSION['alert'] = "<script>alert('Seja bem vindo " . $data['nomeuser'] . "')</script>";
+                return true;
+            } else {
                 $_SESSION['alert'] = "<script>alert('Usuario ou senha inválida'), history.back()</script>";
                 return false;
-            }else{
-                $data = $result[0];
-                if(password_verify($pass, $data['passuser'])){
-                    $user = new User();
-                    $user->setData($data);
-                    $_SESSION['user'] = $user->getData();
-                    $_SESSION['logado'] = true;
-                    $_SESSION['alert'] = "<script>alert('Seja bem vindo ".$data['nomeuser']."')</script>";
-                    return true;
-                }else{
-                    $_SESSION['alert'] = "<script>alert('Usuario ou senha inválida'), history.back()</script>";
-                    return false;
-                }
-
             }
         }
+    }
 
-        public static function logout()
-        {
-            session_destroy();
+    public static function logout()
+    {
+        session_destroy();
+        return true;
+    }
+
+    public function getForgot($email)
+    {
+        $sql = new Sql();
+
+        $results = $sql->select("SELECT * FROM user WHERE emailuser = :email", array(
+            ":email" => $email
+        ));
+
+        if (count($results) > 0) {
+            $data = $results[0];
+
+            $sql->insert("INSERT INTO userrecoverypass (iduser, userip) VALUES (:iduser, :userip)", array(
+                ":iduser" => $data['iduser'],
+                ":userip" => $_SERVER['REMOTE_ADDR']
+            ));
+            $resultrecovery = $sql->select("SELECT * FROM userrecoverypass WHERE idrecovery = LAST_INSERT_ID()");
+
+            if ($resultrecovery > 0) {
+                $dataRecovery = $resultrecovery[0];
+
+                $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length("aes-256-cbc"));
+                $code = openssl_encrypt($dataRecovery['idrecovery'], "aes-256-cbc", User::KEY, 0, $iv);
+                $result = base64_encode($iv . $code);
+
+                $link = "http://localhost/cetdabar/login/reset?code=$result";
+
+                $message = "Olá, $data[nomeuser]. \n\n <br><br> Para alterar sua senha, acesse o link a seguir dentro de uma hora: $link";
+
+                $mailer = new Mailer($data['emailuser'], $data['nomeuser'], "Redefinição de senha", $message);
+
+                $mailer->send();
+
+                $_SESSION['alert'] = "<script>alert('Verifique sua caixa de email com as informações de alteração de senha');</script>";
+                return true;
+            } else {
+                $_SESSION['alert'] = "<script>alert('Não foi possível recuperar a senha');</script>";
+                return false;
+            }
+
+            return true;
+        } else {
+            $_SESSION['alert'] = "<script>alert('Não foi possível recuperar a senha');</script>";
+            return false;
+        }
+    }
+
+    public function validForgotDecrypt($result)
+    {
+        $result = base64_decode($result);
+
+        $code = mb_substr($result, openssl_cipher_iv_length("aes-256-cbc"), null, '8bit');
+        $iv = mb_substr($result, 0, openssl_cipher_iv_length("aes-256-cbc"), '8bit');
+
+        $idrecovery = openssl_decrypt($code, "aes-256-cbc", User::KEY, 0, $iv);
+
+        $sql = new Sql();
+
+        $resultdecrypt = $sql->select("SELECT * FROM userrecoverypass a INNER JOIN user b USING(iduser) WHERE a.idrecovery = :code AND a.dtrecovery IS NULL AND DATE_ADD(a.dtregister, INTERVAL 1 HOUR) >= NOW();", array(
+            ":code" => $idrecovery
+        ));
+
+        if (count($resultdecrypt) > 0) {
+            return $resultdecrypt[0];
+        } else {
+            $_SESSION['alert'] = "<script>alert('Não foi possível recuperar a senha');</script>";
+            return false;
+        }
+    }
+
+    public function setForgot($idrecovery)
+    {
+        $sql = new Sql();
+
+        $sql->query("UPDATE userrecoverypass SET dtrecovery = NOW() WHERE idrecovery = :id", array(
+            ":id" => $idrecovery
+        ));
+    }
+
+    public function setPassword($pass, $iduser)
+    {
+        $sql = new SQL();
+
+        $result = $sql->query("UPDATE user SET passuser = :pass WHERE iduser = :iduser", array(
+            ":pass" => $pass,
+            ":iduser" => $iduser
+        ));
+
+        if ($result) {
+            $_SESSION['alert'] = "<script>alert('Senha atualizada com sucesso');</script>";
+            return true;
+        } else {
+            $_SESSION['alert'] = "<script>alert('Não foi possível atualizar a senha');</script>";
+            return false;
+        }
+    }
+
+    public function getUsers()
+    {
+        $sql = new Sql();
+
+        $result = $sql->select("SELECT * FROM user");
+
+        return $result;
+    }
+
+    public function get($iduser)
+    {
+        $sql = new Sql();
+
+        $result = $sql->select("SELECT * FROM user WHERE iduser = :iduser", array(
+            ":iduser" => $iduser
+        ));
+
+        return $result[0];
+    }
+
+    public function upatePass()
+    {
+    }
+
+    public function validateUpdatePass()
+    {
+    }
+
+    public function createAddress()
+    {
+    }
+
+    public function delete()
+    {
+        $sql = new SQL();
+
+        $result = $sql->query("DELETE FROM user WHERE iduser = :iduser", array(
+            ":iduser" => $this->getiduser()
+        ));
+
+        if ($result) {
+            $_SESSION['alert'] = "<script>alert('Usuario deletado com sucesso');</script>";
+            return true;
+        } else {
+            $_SESSION['alert'] = "<script>alert('Não foi possível deletar usuario');</script>";
+            return false;
+        }
+    }
+
+    //Create User Admin
+    public function validateDataCreateUserAdmin($data = array())
+    {
+        //Validate Nome
+        if (empty($data['nomeuser'])) {
+
+            $_SESSION['alert'] = "<script>alert('Preencha o campo nome'); history.back()</script>";
+            return false;
+
+        //Validate Email
+        } else if (empty($data['emailuser'])) {
+
+            $_SESSION['alert'] = "<script>alert('Preencha o campo E-mail'); history.back()</script>";
+            return false;
+        } else if (!filter_var($data["emailuser"], FILTER_VALIDATE_EMAIL)) {
+
+            $_SESSION['alert'] = "<script>alert('Insira um formato de email válido'); history.back()</script>";
+            return false;
+
+        //Validate Senha
+        } else if (empty($data["passuser"])) {
+
+            $_SESSION['alert'] = "<script>alert('Insira um formato de email válido'); history.back()</script>";
+            return false;
+
+        } else if (!preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d].\S{8,36}$/', $data['passuser'])) {
+
+            $_SESSION['alert'] = "<script>alert('Insira uma senha válida'); history.back()</script>";
+            return false;
+
+        //Validade Cel
+        } else if (empty($data["celuser"])) {
+
+            $_SESSION['alert'] = "<script>alert('Preencha o campo celular'); history.back()</script>";
+            return false;
+
+        } else if (!preg_match('^\(+[0-9]{2,3}\) [0-9]{5}-[0-9]{4}$^', $data['celuser'])) {
+
+            $_SESSION['alert'] = "<script>alert('Celular inválido'); history.back()</script>";
+            return false;
+
+        //Validade Tel
+        } else if (!empty($data['telfixo']) && !preg_match('^\(+[0-9]{2,3}\) [0-9]{4}-[0-9]{4}$^', $data['telfixo'])) {
+
+            $_SESSION['alert'] = "<script>alert('Tel. Fixo inválido'); history.back()</script>";
+            return false;
+
+        //Validate Data Nasc
+        } else if (empty($data['datanasc'])) {
+
+            $_SESSION['alert'] = "<script>alert('Preencha o campo Data Nasc'); history.back()</script>";
+            return false;
+            
+        } else if (!preg_match('/^\d{4}\-\d{1,2}\-\d{1,2}$/', $data['datanasc'])) {
+
+            $_SESSION['alert'] = "<script>alert('Insira um formato de data valido'); history.back()</script>";
+            return false;
+
+        //Validate Document
+        } else if (empty($data['documento'])){
+
+            $_SESSION['alert'] = "<script>alert('Preencha o campo Documento'); history.back()</script>";
+            return false;
+
+        } else if (empty($data['cpf'])){
+
+            $_SESSION['alert'] = "<script>alert('Preencha o campo CPF'); history.back()</script>";
+            return false;
+
+        } else if (!$this->validateDocument($data['cpf'])){
+
+            $_SESSION['alert'] = "<script>alert('CPF inválido'); history.back()</script>";
+            return false;
+
+        //Validate Sexo
+        } else if ($data['sexouser'] <1 || $data['sexouser'] > 2){
+
+            $_SESSION['alert'] = "<script>alert('Sexo inválido'); history.back()</script>";
+            return false;
+
+        //Validate CatUser
+        } else if ($data['catuser'] > 2 || $data['catuser'] < 1) {
+
+            $_SESSION['alert'] = "<script>alert('Categoria de usuario inválido'); history.back()</script>";
+            return false;
+
+        //Validate Admin
+        } else if (!empty($data['admin']) && $data['admin'] != 1) {
+
+            $_SESSION['alert'] = "<script>alert('Valor de administrador inválido'); history.back()</script>";
+            return false;
+        } else {
             return true;
         }
+    }
 
-        public function getForgot($email)
-        {
-            $sql = new Sql();
+    public function createUserAdmin($data)
+    {
+        $sql = new Sql();
 
-            $results = $sql->select("SELECT * FROM user WHERE emailuser = :email", array(
-                ":email" => $email
-            ));
-
-            if(count($results) > 0){
-                $data = $results[0];
-
-                $sql->insert("INSERT INTO userrecoverypass (iduser, userip) VALUES (:iduser, :userip)", array(
-                    ":iduser" => $data['iduser'],
-                    ":userip" => $_SERVER['REMOTE_ADDR']
-                )); 
-                $resultrecovery = $sql->select("SELECT * FROM userrecoverypass WHERE idrecovery = LAST_INSERT_ID()");
-
-                if($resultrecovery > 0){
-                    $dataRecovery = $resultrecovery[0];
-
-                    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length("aes-256-cbc"));
-                    $code = openssl_encrypt($dataRecovery['idrecovery'], "aes-256-cbc", User::KEY, 0, $iv);
-                    $result = base64_encode($iv.$code);
-
-                    $link = "http://localhost/cetdabar/login/reset?code=$result";
-
-                    $message = "Olá, $data[nomeuser]. \n\n <br><br> Para alterar sua senha, acesse o link a seguir dentro de uma hora: $link";
-
-                    $mailer = new Mailer($data['emailuser'], $data['nomeuser'], "Redefinição de senha", $message);
-
-                    $mailer->send();
-
-                    $_SESSION['alert'] = "<script>alert('Verifique sua caixa de email com as informações de alteração de senha');</script>";
-                    return true;
-                }else{
-                    $_SESSION['alert'] = "<script>alert('Não foi possível recuperar a senha');</script>";
-                    return false;
-                }
-
-                return true;
-            }else{
-                $_SESSION['alert'] = "<script>alert('Não foi possível recuperar a senha');</script>";
-                return false;
-            }
+        if (!isset($data['admin'])) {
+            $data['admin'] = 0;
         }
 
-        public function validForgotDecrypt($result)
-        {
-            $result = base64_decode($result);
+        $data['passuser'] = password_hash($data['passuser'], PASSWORD_DEFAULT, ['cost' => 12]);
 
-            $code = mb_substr($result, openssl_cipher_iv_length("aes-256-cbc"), null, '8bit');
-            $iv = mb_substr($result, 0, openssl_cipher_iv_length("aes-256-cbc"), '8bit');
-
-            $idrecovery = openssl_decrypt($code, "aes-256-cbc", User::KEY, 0, $iv);
-
-            $sql = new Sql();
-
-            $resultdecrypt = $sql->select("SELECT * FROM userrecoverypass a INNER JOIN user b USING(iduser) WHERE a.idrecovery = :code AND a.dtrecovery IS NULL AND DATE_ADD(a.dtregister, INTERVAL 1 HOUR) >= NOW();", array(
-                ":code" => $idrecovery
+        if (!empty($data['telfixo'])) {
+            $result = $sql->query("INSERT INTO user (nomeuser, emailuser, passuser, imguser, telfixouser, celuser, datanasc, sexouser, estadocivil, documento, cpf, admin, catuser, status) VALUES (:nomeuser, :emailuser, :passuser, :imguser, :telfixo, :celuser, :datanasc, :sexouser, :estadocivil, :documento, :cpf, :admin, :catuser, :status)", array(
+                ":nomeuser" => $data['nomeuser'],
+                ":emailuser" => $data['emailuser'],
+                ":passuser" => $data['passuser'],
+                ":imguser" => "default.svg",
+                ":telfixo" => $data['telfixo'],
+                ":celuser" => $data['celuser'],
+                ":datanasc" => $data['datanasc'],
+                ":sexouser" => $data['sexouser'],
+                ":estadocivil" => $data['estadocivil'],
+                ":documento" => $data['documento'],
+                ":cpf" => $data['cpf'],
+                ":admin" => $data['admin'],
+                ":catuser" => $data['catuser'],
+                ":status" => 1
             ));
-
-            if(count($resultdecrypt) > 0){
-                return $resultdecrypt[0];
-            }else{
-                $_SESSION['alert'] = "<script>alert('Não foi possível recuperar a senha');</script>";
-                return false;
-            }
-        }
-
-        public function setForgot($idrecovery)
-        {
-            $sql = new Sql();
-
-            $sql->query("UPDATE userrecoverypass SET dtrecovery = NOW() WHERE idrecovery = :id", array(
-                ":id" => $idrecovery
+        } else {
+            $result = $sql->query("INSERT INTO user (nomeuser, emailuser, passuser, imguser, celuser, datanasc, sexouser, estadocivil, documento, cpf, admin, catuser, status) VALUES (:nomeuser, :emailuser, :passuser, :imguser, :datanasc, :sexouser, :estadocivil, :documento, :cpf, :admin, :catuser, :status)", array(
+                ":nomeuser" => $data['nomeuser'],
+                ":emailuser" => $data['emailuser'],
+                ":passuser" => $data['passuser'],
+                ":imguser" => "default.svg",
+                ":celuser" => $data['celuser'],
+                ":datanasc" => $data['datanasc'],
+                ":sexouser" => $data['sexouser'],
+                ":estadocivil" => $data['estadocivil'],
+                ":documento" => $data['documento'],
+                ":cpf" => $data['cpf'],
+                ":admin" => $data['admin'],
+                ":catuser" => $data['catuser'],
+                ":status" => 1
             ));
         }
 
-        public function setPassword($pass, $iduser)
-        {
-            $sql = new SQL();
+        if ($result) {
+            $_SESSION['alert'] = "<script>alert('Usuario criado com sucesso');</script>";
+            return true;
+        } else {
+            $_SESSION['alert'] = "<script>alert('Não foi possível criar o usuario');</script>";
+            return true;
+        }
+    }
 
-            $result = $sql->query("UPDATE user SET passuser = :pass WHERE iduser = :iduser", array(
-                ":pass" => $pass,
-                ":iduser" => $iduser
+    //Update UserAdmin
+    public function updateUserAdmin()
+    {
+        $sql = new Sql();
+
+        if ($this->gettelfixo() != NULL) {
+            $result = $sql->query("UPDATE user SET nomeuser = :nomeuser, emailuser = :emailuser, telfixouser = :telfixo, celuser = :celuser, datanasc = :datanasc, sexouser = :sexouser, estadocivil = :estadocivil, documento = :documento, cpf = :cpf, admin = :admin, catuser = :catuser, status = :status WHERE iduser = :iduser", array(
+                ":iduser" => $this->getiduser(),
+                ":nomeuser" => $this->getnomeuser(),
+                ":emailuser" => $this->getemailuser(),
+                ":telfixo" => $this->gettelfixo(),
+                ":celuser" => $this->getceluser(),
+                ":datanasc" => $this->getdatanasc(),
+                ":sexouser" => $this->getsexouser(),
+                ":estadocivil" => $this->getestadocivil(),
+                ":documento" => $this->getdocumento(),
+                ":cpf" => $this->getcpf(),
+                ":admin" => $this->getadmin(),
+                ":catuser" => $this->getcatuser(),
+                ":status" => $this->getstatus()
             ));
-
-            if($result){
-                $_SESSION['alert'] = "<script>alert('Senha atualizada com sucesso');</script>";
-                return true;
-            }else{
-                $_SESSION['alert'] = "<script>alert('Não foi possível atualizar a senha');</script>";
-                return false;
-            }
-        }
-
-        public function getUsers()
-        {
-            $sql = new Sql();
-
-            $result = $sql->select("SELECT * FROM user");
-
-            return $result;
-        }
-
-        public function get($iduser)
-        {
-            $sql = new Sql();
-
-            $result = $sql->select("SELECT * FROM user WHERE iduser = :iduser", array(
-                ":iduser" => $iduser
+        } else {
+            $result = $sql->query("UPDATE user SET nomeuser = :nomeuser, emailuser = :emailuser, celuser = :celuser, datanasc = :datanasc, sexouser = :sexouser, estadocivil = :estadocivil, documento = :documento, cpf = :cpf, admin = :admin, catuser = :catuser, status = :status WHERE iduser = :iduser", array(
+                ":iduser" => $this->getiduser(),
+                ":nomeuser" => $this->getnomeuser(),
+                ":emailuser" => $this->getemailuser(),
+                ":celuser" => $this->getceluser(),
+                ":datanasc" => $this->getdatanasc(),
+                ":sexouser" => $this->getsexouser(),
+                ":estadocivil" => $this->getestadocivil(),
+                ":documento" => $this->getdocumento(),
+                ":cpf" => $this->getcpf(),
+                ":admin" => $this->getadmin(),
+                ":catuser" => $this->getcatuser(),
+                ":status" => $this->getstatus()
             ));
-
-            return $result[0];
         }
 
-        public function createUserAdmin()
-        {
-
+        if ($result) {
+            $_SESSION['alert'] = "<script>alert('Usuario atualizado com sucesso');</script>";
+            return true;
+        } else {
+            $_SESSION['alert'] = "<script>alert('Não foi possível atualizar o usuario');</script>";
+            return true;
         }
+    }
 
-        public function validateDataUserAdmin($data = array())
-        {
-            //Validate Nome
-            if(empty($data['nomeuser'])){
+    public function validateUpdateUserAdmin($data = array())
+    {
+        //Validate Nome
+        if (empty($data['nomeuser'])) {
+
+            $_SESSION['alert'] = "<script>alert('Preencha o campo nome'); history.back()</script>";
+            return false;
+
+        //Validate Email
+        } else if (empty($data['emailuser'])) {
+
+            $_SESSION['alert'] = "<script>alert('Preencha o campo E-mail'); history.back()</script>";
+            return false;
+
+        } else if (!filter_var($data["emailuser"], FILTER_VALIDATE_EMAIL)) {
+
+            $_SESSION['alert'] = "<script>alert('Insira um formato de email válido'); history.back()</script>";
+            return false;
+
+        //Validade Cel
+        } else if (empty($data["celuser"])) {
+
+            $_SESSION['alert'] = "<script>alert('Preencha o campo celular'); history.back()</script>";
+            return false;
+
+        } else if (!preg_match('^\(+[0-9]{2,3}\) [0-9]{5}-[0-9]{4}$^', $data['celuser'])) {
+
+            $_SESSION['alert'] = "<script>alert('Celular inválido'); history.back()</script>";
+            return false;
+
+        //Validade Tel
+        } else if (!empty($data['telfixo']) && !preg_match('^\(+[0-9]{2,3}\) [0-9]{4}-[0-9]{4}$^', $data['telfixo'])) {
+
+            $_SESSION['alert'] = "<script>alert('Tel. Fixo inválido'); history.back()</script>";
+            return false;
+
+        //Validate Data Nasc
+        } else if (empty($data['datanasc'])) {
+
+            $_SESSION['alert'] = "<script>alert('Preencha o campo Data Nasc'); history.back()</script>";
+            return false;
+            
+        } else if (!preg_match('/^\d{4}\-\d{1,2}\-\d{1,2}$/', $data['datanasc'])) {
+
+            $_SESSION['alert'] = "<script>alert('Insira um formato de data valido'); history.back()</script>";
+            return false;
+
+        //Validate Document
+        } else if (empty($data['documento'])){
+
+            $_SESSION['alert'] = "<script>alert('Preencha o campo Documento'); history.back()</script>";
+            return false;
+
+        } else if (empty($data['cpf'])){
+
+            $_SESSION['alert'] = "<script>alert('Preencha o campo CPF'); history.back()</script>";
+            return false;
+
+        } else if (!$this->validateDocument($data['cpf'])){
+
+            $_SESSION['alert'] = "<script>alert('CPF inválido'); history.back()</script>";
+            return false;
+
+        //Validate Sexo
+        } else if ($data['sexouser'] <1 || $data['sexouser'] > 2){
+
+            $_SESSION['alert'] = "<script>alert('Sexo inválido'); history.back()</script>";
+            return false;
+
+        //Validate CatUser
+        } else if ($data['catuser'] > 2 || $data['catuser'] < 1) {
+
+            $_SESSION['alert'] = "<script>alert('Categoria de usuario inválido'); history.back()</script>";
+            return false;
+
+        //Validate Status
+        } else if ($data['status'] > 1 || $data['status'] < 0){
+
+            $_SESSION['alert'] = "<script>alert('Status inválido'); history.back()</script>";
+            return false;
+
+        //Validate Admin
+        } else if (!empty($data['admin']) && $data['admin'] != 1) {
+
+            $_SESSION['alert'] = "<script>alert('Valor de administrador inválido'); history.back()</script>";
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    //Validate CPF
+    public function validateDocument($cpf)
+    {
+        // Extrai somente os números
+        $cpf = preg_replace( '/[^0-9]/is', '', $cpf );
         
-                $_SESSION['alert'] = "<script>alert('Preencha o campo nome'); history.back()</script>";
+        // Verifica se foi informado todos os digitos corretamente
+        if (strlen($cpf) != 11) {
+            return false;
+        }
+
+        // Verifica se foi informada uma sequência de digitos repetidos. Ex: 111.111.111-11
+        if (preg_match('/(\d)\1{10}/', $cpf)) {
+            return false;
+        }
+
+        // Faz o calculo para validar o CPF
+        for ($t = 9; $t < 11; $t++) {
+            for ($d = 0, $c = 0; $c < $t; $c++) {
+                $d += $cpf[$c] * (($t + 1) - $c);
+            }
+            $d = ((10 * $d) % 11) % 10;
+            if ($cpf[$c] != $d) {
                 return false;
-
-            //Validate Email
-            }else if(empty($data['emailuser'])){
-
-                $_SESSION['alert'] = "<script>alert('Preencha o campo E-mail'); history.back()</script>";
-                return false;
-
-            }else if(!filter_var($data["emailuser"], FILTER_VALIDATE_EMAIL)){
-
-                $_SESSION['alert'] = "<script>alert('Insira um formato de email válido'); history.back()</script>";
-                return false;
-
-            //Validate Senha
-            }else if(empty($data["passuser"])){
-
-                $_SESSION['alert'] = "<script>alert('Insira um formato de email válido'); history.back()</script>";
-                return false;
-
-            }else if(!preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d].\S{8,36}$/', $data['passuser'])){
-
-                $_SESSION['alert'] = "<script>alert('Insira uma senha válida'); history.back()</script>";
-                return false;
-
-            //Validade Cel
-            }else if(empty($data["celuser"])){
-                
-                $_SESSION['alert'] = "<script>alert('Preencha o campo celular'); history.back()</script>";
-                return false;
-
-            }else if(!preg_match('^\(+[0-9]{2,3}\) [0-9]{5}-[0-9]{4}$^', $data['celuser'])){
-                
-                $_SESSION['alert'] = "<script>alert('Celular inválido'); history.back()</script>";
-                return false;
-
-            //Validade Tel
-            }else if(!empty($data['telfixo']) && !preg_match('^\(+[0-9]{2,3}\) [0-9]{4}-[0-9]{4}$^', $data['telfixo'])){
-                
-                $_SESSION['alert'] = "<script>alert('Tel. Fixo inválido'); history.back()</script>";
-                return false;
-
-            //Validate Data Nasc
-            }else if(empty($data['datanasc'])){
-
-                $_SESSION['alert'] = "<script>alert('Preencha o campo Data Nasc'); history.back()</script>";
-                return false;
-
-            }else if(!preg_match('/^\d{4}\-\d{1,2}\-\d{1,2}$/', $data['datanasc'])){
-
-                $_SESSION['alert'] = "<script>alert('Insira um formato de data valido'); history.back()</script>";
-                return false;
-
-            //Validate CatUser
-            }else if($data['catuser'] > 2 || $data['catuser'] < 1){
-
-                $_SESSION['alert'] = "<script>alert('Categoria de usuario inválido'); history.back()</script>";
-                return false;
-
-            //Validate Admin
-            }else if(!empty($data['admin']) && $data['admin'] != 1){
-                
-                $_SESSION['alert'] = "<script>alert('Valor de administrador inválido'); history.back()</script>";
-                return false;
-
-            }else{
-                return true;
             }
         }
-     }
-?>
+        return true;
+    }
+
+    //Validate Address
+    public function validateAddress()
+    {
+    }
+}

@@ -1,139 +1,184 @@
-<?php 
+<?php
 
-    use Psr\Http\Message\ResponseInterface as Response;
-    use Psr\Http\Message\ServerRequestInterface as Request;
-    use Class\Model\User\User;
-    use Class\PageAdmin;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Class\Model\User\User;
+use Class\PageAdmin;
 
-    //Admin users
-    $app->get("/cetdabar/admin/users", function(Request $request, Response $response){
-        if(isset($_SESSION['alert'])){
-            echo $_SESSION['alert'];
-            unset($_SESSION['alert']);
+//Admin users
+$app->get("/cetdabar/admin/users", function (Request $request, Response $response) {
+    if (isset($_SESSION['alert'])) {
+        echo $_SESSION['alert'];
+        unset($_SESSION['alert']);
+    }
+
+    if ($_SESSION['user']['admin'] != 1) {
+        $_SESSION['alert'] = "<script>alert('Acesso negado');</script>";
+        header("location: /cetdabar/");
+        exit();
+    }
+
+    $users = new User();
+
+    $data = $users->getUsers();
+
+    for ($i = 0; $i < count($data); $i++) {
+        if ($data[$i]['status'] == 1) {
+            $data[$i]['status'] = "Ativo";
+        } else {
+            $data[$i]['status'] = "Inativo";
         }
 
-        if($_SESSION['user']['admin'] != 1){
-            $_SESSION['alert'] = "<script>alert('Acesso negado');</script>";
-            header("location: /cetdabar/");
+        if ($data[$i]['admin'] == 1) {
+            $data[$i]['admin'] = "Sim";
+        } else {
+            $data[$i]['admin'] = "Não";
+        }
+    }
+
+    $page = new PageAdmin(array(
+        "header" => false,
+        "footer" => false,
+        "data" => array(
+            "user" => $_SESSION['user'],
+            "users" => $data
+        )
+    ), "views/admin/users-admin");
+
+    $page->setTpl("users");
+
+    return $response;
+});
+
+//Create
+$app->get("/cetdabar/admin/users/user-add", function (Request $request, Response $response) {
+    if (isset($_SESSION['alert'])) {
+        echo $_SESSION['alert'];
+        unset($_SESSION['alert']);
+    }
+
+    if ($_SESSION['user']['admin'] != 1) {
+        $_SESSION['alert'] = "<script>alert('Acesso negado');</script>";
+        header("location: /cetdabar/");
+        exit();
+    }
+
+    $page = new PageAdmin(array(
+        "header" => false,
+        "footer" => false,
+        "data" => array(
+            "user" => $_SESSION['user']
+        )
+    ), "views/admin/users-admin");
+
+    $page->setTpl("user-create");
+
+    return $response;
+});
+$app->post("/cetdabar/admin/users/user-add", function (Request $request, Response $response) {
+
+    $user = new User();
+
+    if ($user->validateDataCreateUserAdmin($_POST)) {
+        if ($user->createUserAdmin($_POST)) {
+            header("Location: /cetdabar/admin/users");
             exit();
-        }
-
-        $users = new User();
-
-        $data = $users->getUsers();
-
-        for($i = 0; $i < count($data); $i++) {
-            if($data[$i]['status'] == 1){
-                $data[$i]['status'] = "Ativo";
-            }else{
-                $data[$i]['status'] = "Inativo";
-            }
-
-            if($data[$i]['admin'] == 1){
-                $data[$i]['admin'] = "Sim";
-            }else{
-                $data[$i]['admin'] = "Não";
-            }
-        }
-
-        $page = new PageAdmin(array(
-            "header" => false,
-            "footer" => false,
-            "data" => array(
-                "user" => $_SESSION['user'],
-                "users" => $data
-            )
-        ), "views/admin/users-admin");
-
-        $page->setTpl("users");
-
-        return $response;
-    });
-    
-    //Create
-    $app->get("/cetdabar/admin/users/user-add", function (Request $request, Response $response){
-        if(isset($_SESSION['alert'])){
-            echo $_SESSION['alert'];
-            unset($_SESSION['alert']);
-        }
-
-        if($_SESSION['user']['admin'] != 1){
-            $_SESSION['alert'] = "<script>alert('Acesso negado');</script>";
-            header("location: /cetdabar/");
-            exit();
-        }
-
-        $page = new PageAdmin(array(
-            "header" => false,
-            "footer" => false,
-            "data" => array(
-                "user" => $_SESSION['user']
-            )
-        ), "views/admin/users-admin");
-
-        $page->setTpl("user-create");
-
-        return $response;
-
-    });
-    $app->post("/cetdabar/admin/users/user-add", function(Request $request, Response $response){
-
-        $user = new User();
-
-        if($user->validateDataUserAdmin($_POST)){
-            if($user->createUserAdmin()){
-
-            }else{
-                header("Location: /cetdabar/admin/users/user-add");
-                exit();
-            }
-        }else{
+        } else {
             header("Location: /cetdabar/admin/users/user-add");
             exit();
         }
+    } else {
+        header("Location: /cetdabar/admin/users/user-add");
+        exit();
+    }
 
-        return $response;
-    });
+    return $response;
+});
 
-    //Update
-    $app->get("/cetdabar/admin/users/{iduser}", function(Request $request, Response $response, $args){
-        $iduser = $args['iduser'];
+//Update
+$app->get("/cetdabar/admin/users/{iduser}", function (Request $request, Response $response, $args) {
+    $iduser = $args['iduser'];
 
-        if(isset($_SESSION['alert'])){
-            echo $_SESSION['alert'];
-            unset($_SESSION['alert']);
-        }
+    if (isset($_SESSION['alert'])) {
+        echo $_SESSION['alert'];
+        unset($_SESSION['alert']);
+    }
 
-        if($_SESSION['user']['admin'] != 1){
-            $_SESSION['alert'] = "<script>alert('Acesso negado');</script>";
-            header("location: /cetdabar/");
+    if ($_SESSION['user']['admin'] != 1) {
+        $_SESSION['alert'] = "<script>alert('Acesso negado');</script>";
+        header("location: /cetdabar/");
+        exit();
+    }
+
+    $user = new User();
+
+    $data = $user->get($iduser);
+
+    if($data == 0){
+        header("Location: /cetdabar/admin/users");
+        exit();
+    }
+
+    $page = new PageAdmin(array(
+        "header" => false,
+        "footer" => false,
+        "data" => [
+            "user" => $_SESSION['user'],
+            "userdata" => $data
+        ]
+    ), "views/admin/users-admin");
+
+    $page->setTpl("user-update");
+
+    return $response;
+});
+
+$app->post("/cetdabar/admin/users/{iduser}", function (Request $request, Response $response, $args) {
+    $iduser = $args['iduser'];
+
+    $user = new User();
+
+    $_POST['iduser'] = $iduser;
+    $_POST['admin'] = (isset($_POST['admin']) ? $_POST['admin'] : 0);
+
+    if ($user->validateUpdateUserAdmin($_POST)) {
+        $user->setData($_POST);
+        if ($user->updateUserAdmin()) {
+            header("Location: /cetdabar/admin/users");
+            exit();
+        } else {
+            header("Location: /cetdabar/admin/users/$iduser");
             exit();
         }
+    } else {
+        header("Location: /cetdabar/admin/users/$iduser");
+        exit();
+    }
 
-        $user = new User();
+    return $response;
+});
 
-        $data = $user->get($iduser);
+//Delete
+$app->get("/cetdabar/admin/users/{iduser}/delete", function (Request $request, Response $response, $args) {
+    if ($_SESSION['user']['admin'] != 1) {
+        $_SESSION['alert'] = "<script>alert('Acesso negado');</script>";
+        header("location: /cetdabar/");
+        exit();
+    }
 
-        $page = new PageAdmin(array(
-            "header" => false,
-            "footer" => false,
-            "data" => [
-                "user" => $_SESSION['user'],
-                "userdata" => $data
-            ]
-        ), "views/admin/users-admin");
+    $iduser = $args['iduser'];
 
-        $page->setTpl("user-update");
+    $user = new User();
 
-        return $response;
-    });
-    $app->post("/cetdabar/admin/users/{iduser}", function(Request $request, Response $response, $args){
-        $iduser = $args['iduser'];
+    $user->setData($user->get($iduser));
 
-        echo "OK";
+    if ($user->delete()) {
+        header("Location: /cetdabar/admin/users");
+        exit();
+    } else {
+        header("Location: /cetdabar/admin/users");
+        exit();
+    }
 
-        return $response;
-    });
-
-
-?>
+    return $response;
+});

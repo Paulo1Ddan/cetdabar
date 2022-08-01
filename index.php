@@ -9,7 +9,7 @@
 
     $app = AppFactory::create();
 
-    try{
+/*     try{ */
         //Site
         //Home
         require_once "routes/site/home.php";
@@ -39,7 +39,7 @@
         require_once "routes/admin/users.php";
 
         $app->run();
-    }catch(\Throwable $th){
+/*     }catch(\Throwable $th){
         //Not found
 
         if(isset($_SESSION['userlogin']) && $_SESSION['userlogin'] === true){
@@ -65,5 +65,5 @@
         $tpl->draw("not-found");
     
         $tpl->draw("footer");
-    }
+    } */
 ?>

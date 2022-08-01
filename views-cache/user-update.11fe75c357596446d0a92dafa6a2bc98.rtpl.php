@@ -16,7 +16,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="/cetdabar/res/admin/plugins/fontawesome-free/css/all.min.css">
+    <script src="https://kit.fontawesome.com/a9f506c8dd.js" crossorigin="anonymous"></script>
     <!-- Theme style -->
     <link rel="stylesheet" href="/cetdabar/res/admin/dist/css/adminlte.css">
 </head>
@@ -280,76 +280,94 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <div class="card-body">
 
                                         <!-- Nome -->
+                                        <label for="nomeuser" class="form-label">Nome</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
                                             </div>
-                                            <input type="text" value="<?php echo htmlspecialchars( $userdata["nomeuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" name="nomeuser"
-                                                class="form-control" placeholder="Nome">
+                                            <input type="text" required name="nomeuser" id="nomeuser" class="form-control" value="<?php echo htmlspecialchars( $userdata["nomeuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Nome">
                                         </div>
 
                                         <!-- Email -->
+                                        <label for="emauluser" class="form-label">Email</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text"><i
-                                                        class="fa-solid fa-envelope"></i></span>
+                                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
                                             </div>
-                                            <input type="email" value="<?php echo htmlspecialchars( $userdata["emailuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" name="emailuser"
-                                                class="form-control" placeholder="Email">
+                                            <input type="email" required id="emailuser" name="emailuser" class="form-control" value="<?php echo htmlspecialchars( $userdata["emailuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Email">
                                         </div>
 
                                         <!-- Tel. -->
+                                        <label class="form-label">Telefone</label>
                                         <div class="row">
                                             <div class="input-group col-lg-6 col-md-12 mb-3">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i
-                                                            class="bi bi-telephone-fill"></i></span>
+                                                    <span class="input-group-text"><i class="bi bi-telephone-fill"></i></span>
                                                 </div>
-                                                <input type="tel" value="<?php echo htmlspecialchars( $userdata["telfixouser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" name="telfixouser"
-                                                    class="form-control" placeholder="Tel. Fixo" id="telfixo">
+                                                <input type="tel" name="telfixo" class="form-control" value="<?php echo htmlspecialchars( $userdata["telfixouser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Tel. Fixo" id="telfixo">
                                             </div>
                                             <div class="input-group col-lg-6 col-md-12 mb-3">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i
-                                                            class="bi bi-phone-fill"></i></i></span>
+                                                    <span class="input-group-text"><i class="bi bi-phone-fill"></i></i></span>
                                                 </div>
-                                                <input type="tel" value="<?php echo htmlspecialchars( $userdata["celuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" name="celuser"
-                                                    class="form-control" placeholder="Celular" id="celuser">
+                                                <input type="tel" name="celuser" class="form-control" value="<?php echo htmlspecialchars( $userdata["celuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Celular" required id="celuser">
                                             </div>
                                         </div>
 
                                         <!-- Data Nasc. -->
+                                        <label for="datanasc" class="form-label">Data Nasc.</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text"><i
-                                                        class="fa-solid fa-calendar-days"></i></span>
+                                                <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
                                             </div>
-                                            <input type="date" value="<?php echo htmlspecialchars( $userdata["datanasc"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" name="datansc"
-                                                class="form-control" placeholder="Data Nasc.">
+                                            <input type="date" id="datanasc" name="datanasc" class="form-control" value="<?php echo htmlspecialchars( $userdata["datanasc"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Data Nasc.">
                                         </div>
 
                                         <!-- Documentos -->
+                                        <label>Documentos</label>
                                         <div class="row">
                                             <div class="input-group col-lg-6 col-md-12 mb-3">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i
-                                                            class="bi bi-person-badge-fill"></i></span>
+                                                    <span class="input-group-text"><i class="bi bi-person-badge-fill"></i></span>
                                                 </div>
-                                                <input type="text" value="<?php echo htmlspecialchars( $userdata["documento"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" name="documento"
-                                                    class="form-control" placeholder="Documento" id="documento"
-                                                    disabled>
+                                                <input type="text" name="documento" class="form-control" value="<?php echo htmlspecialchars( $userdata["documento"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Documento" id="documento" required>
                                             </div>
                                             <div class="input-group col-lg-6 col-md-12 mb-3">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i
-                                                            class="fa-solid fa-id-card"></i></span>
+                                                    <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
                                                 </div>
-                                                <input type="text" value="<?php echo htmlspecialchars( $userdata["cpf"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" name="cpf"
-                                                    class="form-control" placeholder="CPF" id="cpf" disabled>
+                                                <input type="text" name="cpf" class="form-control" value="<?php echo htmlspecialchars( $userdata["cpf"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="CPF" id="cpf" required>
                                             </div>
                                         </div>
 
+                                        <!-- Sexo -->
+                                        <label for="sexouser" class="form-label">Sexo</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-person-half-dress"></i></span>
+                                            </div>
+                                            <select class="form-control" name="sexouser" id="sexouser">
+                                                <?php if( $userdata["sexouser"] == 1 ){ ?>
+                                                    <option value="1">Masculino</option>
+                                                    <option value="2">Feminino</option>
+                                                <?php }else{ ?>
+                                                    <option value="2">Feminino</option>
+                                                    <option value="1">Masculino</option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+
+                                        <!-- Estado Civil -->
+                                        <label for="maritalstates" class="form-label">Estado civíl</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-ring"></i></span>
+                                            </div>
+                                            <input type="text" required id="maritalstates" name="estadocivil" value="<?php echo htmlspecialchars( $userdata["estadocivil"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="form-control" placeholder="Estado Civil">
+                                        </div>
+
                                         <!-- Categoria -->
+                                        <label>Categoria</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa-solid fa-user-graduate"></i></span>
@@ -366,17 +384,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </div>
 
                                         <!-- Status -->
+                                        <label>Status</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa-solid fa-globe"></i></span>
                                             </div>
                                             <select class="form-control" name="status" id="inputGroupSelect01">
                                                 <?php if( $userdata["status"] == 1 ){ ?>
-                                                <option value="1">Ativo</option>
-                                                <option value="2">Inativo</option>
+                                                    <option value="1">Ativo</option>
+                                                    <option value="0">Inativo</option>
                                                 <?php }else{ ?>
-                                                <option value="2">Inativo</option>
-                                                <option value="1">Ativo</option>
+                                                    <option value="0">Inativo</option>
+                                                    <option value="1">Ativo</option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -384,16 +403,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <!-- Admin -->
                                         <div class="form-check">
                                             <?php if( $userdata["admin"] > 0 ){ ?>
-                                                <input type="checkbox" checked class="form-check-input" value="1" id="useradmin">
+                                                <input type="checkbox" name="admin" checked class="form-check-input" value="1" id="useradmin">
                                                 <label class="form-check-label" for="useradmin">Admin</label>
                                             <?php }else{ ?>
-                                                <input type="checkbox" class="form-check-input" value="1" id="useradmin">
+                                                <input type="checkbox" name="admin" class="form-check-input" value="1" id="useradmin">
                                                 <label class="form-check-label" for="useradmin">Admin</label>
                                             <?php } ?>
                                         </div>
                                     </div>
                                     <!-- /.card-body -->
-
                                     <div class="card-footer">
                                         <button type="submit" class="btn btn-primary">Atualizar</button>
                                     </div>
@@ -445,6 +463,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         $(document).ready(function () {
             $('#telfixo').inputmask("(99) 9999-9999")
             $('#celuser').inputmask("(99) 99999-9999")
+            $('#cpf').inputmask("999.999.999-99")   
+            $('#documento').inputmask("99.999.999-9")
         })
     </script>
 </body>

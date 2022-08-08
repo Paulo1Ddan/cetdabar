@@ -2,12 +2,11 @@
 
     use Psr\Http\Message\ResponseInterface as Response;
     use Psr\Http\Message\ServerRequestInterface as Request;
-    use Class\Model\Cursos\Cursos;
-    use Class\Model\User\User;
     use Class\Model\Blog\Blog;
     use Class\PageAdmin;
 
-    $app->get('/cetdabar/admin', function (Request $request, Response $response){
+    $app->get("/cetdabar/admin/blog", function(Request $request, Response $response){
+
         if(isset($_SESSION['alert'])){
             echo $_SESSION['alert'];
             unset($_SESSION['alert']);
@@ -19,31 +18,21 @@
             exit();
         }
 
-        $users = new User();
-        $cursos = new Cursos();
+        $data = Blog::listAllAdmin();
 
-        $qtdUsers = count($users->getUsers());
-
-        $qtdCursos = count($cursos->listCursosAdmin());
-
-        $qtdArtigos = count(Blog::listAllAdmin());
+        for ($i = 0; $i < count($data); $i++){
+            $dataArtigo = explode("-",$data[$i]['dataartigo']);
+            $data[$i]['dataartigo'] = "$dataArtigo[2]/$dataArtigo[1]/$dataArtigo[0]";
+        }
 
         $page = new PageAdmin(array(
             "header" => false,
             "footer" => false,
             "data" => array(
-                "user" => $_SESSION['user']
+                "dataArtigo" => $data
             )
-        ), "views/admin/home-admin");
-
-        $page->setTpl("index", array(
-            "qtdUsers" => $qtdUsers,
-            "qtdCursos" => $qtdCursos,
-            "qtdArtigos" => $qtdArtigos
         ));
 
-        return $response;
+        $page->setTpl("");
     });
-
-
 ?>

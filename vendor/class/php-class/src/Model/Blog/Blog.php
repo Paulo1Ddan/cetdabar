@@ -11,6 +11,13 @@
             return $sql->select("SELECT * FROM artigo ORDER BY dataartigo DESC");
         }
 
+        public static function listAllAdmin()
+        {
+            $sql = new Sql();
+
+            return $sql->select("SELECT * FROM artigo");
+        }
+
         public function getArtigo($idArtigo)
         {
             $sql = new Sql();

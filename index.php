@@ -38,6 +38,8 @@
         //Users admin
         require_once "routes/admin/users.php";
 
+        //Cursos admin
+        require_once "routes/admin/cursos.php";
         $app->run();
 /*     }catch(\Throwable $th){
         //Not found

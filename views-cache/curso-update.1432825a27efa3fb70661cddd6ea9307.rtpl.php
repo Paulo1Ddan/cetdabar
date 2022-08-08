@@ -11,14 +11,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <title>Admin - Dabar</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/a9f506c8dd.js" crossorigin="anonymous"></script>
     <!-- Theme style -->
     <link rel="stylesheet" href="/cetdabar/res/admin/dist/css/adminlte.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="/cetdabar/res/admin/plugins/summernote/summernote-bs4.min.css">
+
+    <link rel="stylesheet" href="/cetdabar/res/admin/css/curso-admin.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -250,13 +252,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Usuarios</h1>
+                            <h1 class="m-0">Cursos</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="/cetdabar/">Home</a></li>
                                 <li class="breadcrumb-item active"><a href="/cetdabar/admin">Painel</a></li>
-                                <li class="breadcrumb-item active">Usuarios</li>
+                                <li class="breadcrumb-item active">Cursos</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -267,141 +269,124 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <!-- Main content -->
             <div class="content">
                 <div class="container-fluid">
+                    <!-- Dados Curso -->
                     <div class="row">
                         <div class="col-12">
                             <div class="card card-primary">
                                 <div class="card-header">
-                                    <h3 class="card-title">Criar Usuario</h3>
+                                    <h3 class="card-title">Atualizar curso</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
-                                <form method="POST" action="/cetdabar/admin/users/user-add">
+                                <form method="POST" action="/cetdabar/admin/cursos/<?php echo htmlspecialchars( $cursodata["idcurso"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
                                     <div class="card-body">
 
                                         <!-- Nome -->
-                                        <label for="nomeuser" class="form-label">Nome</label>
+                                        <label for="nomecurso" class="form-label">Nome</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                                <span class="input-group-text"><i class="fa-solid fa-pencil"></i></span>
                                             </div>
-                                            <input type="text" required name="nomeuser" id="nomeuser"
-                                                class="form-control" placeholder="Nome">
+                                            <input type="text" required name="nomecurso" value="<?php echo htmlspecialchars( $cursodata["nomecurso"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"
+                                                id="nomecurso" class="form-control" placeholder="Nome">
                                         </div>
 
-                                        <!-- Email -->
-                                        <label for="emauluser" class="form-label">Email</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i
-                                                        class="fa-solid fa-envelope"></i></span>
-                                            </div>
-                                            <input type="email" required id="emailuser" name="emailuser"
-                                                class="form-control" placeholder="Email">
-                                        </div>
-
-                                        <!-- Senha -->
-                                        <label for="passuser" class="form-label">Senha</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                                            </div>
-                                            <input type="password" required id="passuser" name="passuser"
-                                                class="form-control" placeholder="Senha">
-                                        </div>
-
-                                        <!-- Tel. -->
-                                        <label class="form-label">Telefone</label>
-                                        <div class="row">
-                                            <div class="input-group col-lg-6 col-md-12 mb-3">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i
-                                                            class="bi bi-telephone-fill"></i></span>
-                                                </div>
-                                                <input type="tel" name="telfixo" class="form-control"
-                                                    placeholder="Tel. Fixo" id="telfixo">
-                                            </div>
-                                            <div class="input-group col-lg-6 col-md-12 mb-3">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i
-                                                            class="bi bi-phone-fill"></i></i></span>
-                                                </div>
-                                                <input type="tel" name="celuser" class="form-control"
-                                                    placeholder="Celular" required id="celuser">
-                                            </div>
-                                        </div>
-
-                                        <!-- Data Nasc. -->
-                                        <label for="datanasc" class="form-label">Data Nasc.</label>
+                                        <!-- Duração -->
+                                        <label for="duracaocurso" class="form-label">Duração</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i
-                                                        class="fa-solid fa-calendar-days"></i></span>
+                                                        class="fa-solid fa-calendar"></i></span>
                                             </div>
-                                            <input type="date" id="datanasc" name="datanasc" class="form-control"
-                                                placeholder="Data Nasc.">
+                                            <input type="text" required id="duracaocurso" name="duracaocurso"
+                                                value="<?php echo htmlspecialchars( $cursodata["duracao"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="form-control" placeholder="Duração">
                                         </div>
 
-                                        <!-- Documentos -->
-                                        <label>Documentos</label>
-                                        <div class="row">
-                                            <div class="input-group col-lg-6 col-md-12 mb-3">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="bi bi-person-badge-fill"></i></span>
-                                                </div>
-                                                <input type="text" value="" name="documento" class="form-control" placeholder="Documento" id="documento" required>
-                                            </div>
-                                            <div class="input-group col-lg-6 col-md-12 mb-3">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
-                                                </div>
-                                                <input type="text" value="" name="cpf" class="form-control" placeholder="CPF" id="cpf" required>
-                                            </div>
-                                        </div>
-
-                                        <!-- Sexo -->
-                                        <label for="sexouser" class="form-label">Sexo</label>
+                                        <!-- Instrutor -->
+                                        <label for="instrutorcurso" class="form-label">Instrutor</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa-solid fa-person-half-dress"></i></span>
+                                                <span class="input-group-text"><i
+                                                        class="fa-solid fa-graduation-cap"></i></span>
                                             </div>
-                                            <select class="form-control" name="sexouser" id="sexouser">
-                                                <option value="1">Masculino</option>
-                                                <option value="2">Feminino</option>
+                                            <input type="text" required id="instrutorcurso" name="instrutorcurso"
+                                                value="<?php echo htmlspecialchars( $cursodata["instrutor"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="form-control"
+                                                placeholder="Instrutor">
+                                        </div>
+
+                                        <!-- Descricao Curso -->
+                                        <label for="descricaocurso">Descrição</label>
+                                        <div class="mb-3">
+                                            <textarea required name="descricao" placeholder="Digite a descrição aqui"
+                                                id="descricaocurso">
+                                                <?php echo htmlspecialchars( $cursodata["desccurso"], ENT_COMPAT, 'UTF-8', FALSE ); ?>
+                                            </textarea>
+                                        </div>
+
+                                        <!-- Mensagem -->
+                                        <label for="mensagemcurso" class="form-label">Mensagem (Whatsapp)</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-brands fa-whatsapp"></i></span>
+                                            </div>
+                                            <input type="text" required id="mensagemcurso" name="mensagemcurso" value="<?php echo htmlspecialchars( $cursodata["msgcurso"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="form-control" placeholder="Mensagem">
+                                        </div>
+
+                                        <!-- Status -->
+                                        <label>Status</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-globe"></i></span>
+                                            </div>
+                                            <select class="form-control" name="statuscurso" id="inputGroupSelect01">
+                                                <?php if( $cursodata["statuscurso"] == 1 ){ ?>
+                                                <option value="1">Ativo</option>
+                                                <option value="0">Inativo</option>
+                                                <?php }else{ ?>
+                                                <option value="0">Inativo</option>
+                                                <option value="1">Ativo</option>
+                                                <?php } ?>
                                             </select>
-                                        </div>
-
-                                        <!-- Estado Civil -->
-                                        <label for="maritalstates" class="form-label">Estado civíl</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa-solid fa-ring"></i></span>
-                                            </div>
-                                            <input type="text" required id="maritalstates" name="estadocivil"
-                                                class="form-control" placeholder="Estado Civil">
-                                        </div>
-
-                                        <!-- Categoria -->
-                                        <label for="catuser" class="form-label">Categoria</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa-solid fa-user-graduate"></i></span>
-                                            </div>
-                                            <select class="form-control" name="catuser" id="catuser">
-                                                <option value="1">Aluno</option>
-                                                <option value="2">Professor</option>
-                                            </select>
-                                        </div>
-
-                                        <!-- Admin -->
-                                        <div class="form-check">
-                                            <input type="checkbox" name="admin" class="form-check-input" value="1" id="useradmin">
-                                            <label class="form-check-label" for="useradmin">Admin</label>
                                         </div>
                                     </div>
                                     <!-- /.card-body -->
 
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                                        <button type="submit" class="btn btn-primary">Atualizar</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
+                    <!-- Img Curso -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">Atualizar Imagem</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <form method="POST" action="/cetdabar/admin/cursos/<?php echo htmlspecialchars( $cursodata["idcurso"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/update-img" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <div class="card-body">
+                                            <!-- Img Curso -->
+                                            <label for="imgcurso">Imagem do Curso</label>
+                                            <div class="custom-file">
+                                                <input type="file" name="imgcurso" class="custom-file-input" id="imgcurso">
+                                                <label class="custom-file-label" for="customFile">Escolher Imagem</label>
+                                                <div class="boxImgPreview">
+                                                    <img alt="" src="/cetdabar/res/site/<?php echo htmlspecialchars( $cursodata["imgcurso"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="imgPreview">
+                                                </div>
+                                                <input type="hidden" name="oldimgcurso" value="<?php echo htmlspecialchars( $cursodata["imgcurso"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.card-body -->
+
+                                    <div class="card-footer">
+                                        <button type="submit" class="btn btn-primary">Atualizar</button>
                                     </div>
                                 </form>
                             </div>
@@ -446,14 +431,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="/cetdabar/res/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/cetdabar/res/admin/dist/js/adminlte.min.js"></script>
+    <!-- Summernote -->
+    <script src="/cetdabar/res/admin/plugins/summernote/summernote-bs4.min.js"></script>
     <script src="/cetdabar/lib/Inputmask/dist/jquery.inputmask.min.js"></script>
+    <!-- bs-custom-file-input -->
+    <script src="/cetdabar/res/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#telfixo').inputmask("(99) 9999-9999")
-            $('#celuser').inputmask("(99) 99999-9999")
-            $('#cpf').inputmask("999.999.999-99")   
-            $('#documento').inputmask("99.999.999-9")   
-        })
+            // Summernote
+            $('#descricaocurso').summernote()
+        });
+
+        document.querySelector('#imgcurso').addEventListener('change', function () {
+
+            var file = new FileReader();
+
+            file.onload = function () {
+
+                document.querySelector('.imgPreview').src = file.result;
+
+            }
+
+            file.readAsDataURL(this.files[0]);
+        });
+
+        bsCustomFileInput.init();
     </script>
 </body>
 

@@ -24,7 +24,7 @@
         $cursos = Cursos::listAll();
 
         for ($i = 0; $i < count($cursos); $i++) {
-            $cursos[$i]['desccurso'] = mb_strimwidth($cursos[$i]['desccurso'], 0, 250, '...');
+            $cursos[$i]['desccurso'] = mb_strimwidth($cursos[$i]['desccurso'], 0, 500, '...');
         }
 
         $page->setTpl('cursos', array(

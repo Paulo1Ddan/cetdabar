@@ -198,7 +198,6 @@
         //Validate Img Curso
         public function validateImgCurso($file = array())
         {
-
             if(!empty($file)){
                 //Verify Set Image
                 if($file['error'] == 4){

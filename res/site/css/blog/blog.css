@@ -31,7 +31,13 @@
     flex-direction: column;
     justify-content: space-between;
     margin-top: 20px;
-    font-size: 1.2em;
+    width: 100%;
+    font-size: 1.2em !important;
+}
+.containerBlog .blog .txtBlog p{
+    font-size: 1.2em !important;
+    font-family: 'Roboto' !important;
+    width: 100%;
 }
 .containerBlog .blog .txtBlog .btnTxtBlog{
     width: 100%;

@@ -2,7 +2,7 @@
     <?php $counter1=-1;  if( isset($blog) && ( is_array($blog) || $blog instanceof Traversable ) && sizeof($blog) ) foreach( $blog as $key1 => $value1 ){ $counter1++; ?>
         <div class="blog">
             <div class="imgBlog">
-                <img src="res/site/<?php echo htmlspecialchars( $value1["imgcapa"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" alt="">
+                <img src="res/site/assets/blog/capa/<?php echo htmlspecialchars( $value1["imgcapa"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" alt="">
             </div>
             <div class="txtBlog">
                 <h3>

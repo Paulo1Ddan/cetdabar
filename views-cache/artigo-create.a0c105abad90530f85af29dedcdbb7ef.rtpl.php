@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<?php if(!class_exists('Rain\Tpl')){exit;}?><!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
@@ -10,13 +10,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin - Dabar</title>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="/cetdabar/res/admin/plugins/fontawesome-free/css/all.min.css">
+    <script src="https://kit.fontawesome.com/a9f506c8dd.js" crossorigin="anonymous"></script>
     <!-- Theme style -->
     <link rel="stylesheet" href="/cetdabar/res/admin/dist/css/adminlte.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="/cetdabar/res/admin/plugins/summernote/summernote-bs4.min.css">
+
+    <link rel="stylesheet" href="/cetdabar/res/admin/css/blog-admin.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -54,15 +58,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="/cetdabar/res/site/assets/user/{$user.imguser}" class="img-circle elevation-2"
+                        <img src="/cetdabar/res/site/assets/user/<?php echo htmlspecialchars( $user["imguser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="img-circle elevation-2"
                             alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">{$user.nomeuser}</a>
+                        <a href="#" class="d-block"><?php echo htmlspecialchars( $user["nomeuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?></a>
                     </div>
                 </div>
 
-                <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
@@ -127,56 +130,70 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12">
-                            <div class="card">
+                            <div class="card card-primary">
                                 <div class="card-header">
-                                    <h3 class="card-title">Artigos cadastrados</h3>
-
-                                    <div class="card-tools">
-                                        <div class="input-group input-group-sm" style="width: 150px;">
-                                            <a href="/cetdabar/admin/blog/blog-add" class="btn btn-primary">Cadastrar
-                                                Artigo</a>
-                                        </div>
-                                    </div>
+                                    <h3 class="card-title">Criar artigo</h3>
                                 </div>
                                 <!-- /.card-header -->
-                                <div class="card-body table-responsive p-0">
-                                    <table class="table table-hover text-nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Titulo</th>
-                                                <th>Data</th>
-                                                <th>Status</th>
-                                                <th style="width: 200px;">Opções</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {loop="$blog"}
-                                            {if="$value.statusblog == 1"}
-                                            {$value.statusblog = "Ativo"}
-                                            {else}
-                                            {$value.statusblog = "Inativo"}
-                                            {/if}
-                                            <tr>
-                                                <td>{$value.idartigo}</td>
-                                                <td>{$value.tituloartigo}</td>
-                                                <td>{$value.dataartigo}</td>
-                                                <td>{$value.statusblog}</td>
-                                                <td>
-                                                    <a href="/cetdabar/admin/blog/{$value.idartigo}"
-                                                        class="btn btn-primary btn-xs"><i class="fa fa-edit"></i>
-                                                        Editar</a>
-                                                    <a href="/cetdabar/admin/blog/{$value.idartigo}/delete"
-                                                        onclick="return confirm('Deseja realmente excluir este registro?')"
-                                                        class="btn btn-danger btn-xs"><i class="fa fa-trash"></i>
-                                                        Excluir</a>
-                                                </td>
-                                            </tr>
-                                            {/loop}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <!-- /.card-body -->
+                                <!-- form start -->
+                                <form method="POST" action="/cetdabar/admin/blog/blog-add"
+                                    enctype="multipart/form-data">
+                                    <div class="card-body">
+
+                                        <!-- Titulo -->
+                                        <label for="tituloartigo" class="form-label lblTittleBlog">Título do
+                                            Artigo</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-pencil"></i></span>
+                                            </div>
+                                            <input type="text" required name="tituloartigo" id="tituloartigo"
+                                                class="form-control" placeholder="Titulo Artigo">
+                                        </div>
+
+                                        <!-- Artigo -->
+                                        <label for="artigo">Artigo</label>
+                                        <div class="mb-3">
+                                            <textarea required name="artigo" id="artigo">
+                                            </textarea>
+                                        </div>
+
+                                        <!-- Img Capa -->
+                                        <label for="imgcapa">Imagem da Capa</label>
+                                        <div class="custom-file">
+                                            <input type="file" name="imgcapa" class="custom-file-input" id="imgcapa">
+                                            <label class="custom-file-label" for="customFile">Escolher arquivo</label>
+                                            <div class="boxImgPreview">
+                                                <img alt="" class="imgPreviewCapa">
+                                            </div>
+                                        </div>
+                                        <!-- Img Banner -->
+                                        <label for="imgbanner">Imagem do Banner</label>
+                                        <div class="custom-file">
+                                            <input type="file" name="imgbanner" class="custom-file-input"
+                                                id="imgbanner">
+                                            <label class="custom-file-label" for="customFile">Escolher arquivo</label>
+                                            <div class="boxImgPreview">
+                                                <img alt="" class="imgPreviewBanner">
+                                            </div>
+                                        </div>
+
+                                        <!-- Autor -->
+                                        <label for="autor" class="form-label">Autor</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                            </div>
+                                            <input type="text" required name="autor" id="autor" class="form-control"
+                                                disabled value="<?php echo htmlspecialchars( $nameuserblog, ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Titulo Artigo">
+                                        </div>
+                                    </div>
+                                    <!-- /.card-body -->
+
+                                    <div class="card-footer">
+                                        <button type="submit" id="btnSubmit" class="btn btn-primary">Cadastrar</button>
+                                    </div>
+                                </form>
                             </div>
                             <!-- /.card -->
                         </div>
@@ -214,11 +231,51 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- REQUIRED SCRIPTS -->
 
     <!-- jQuery -->
-    <script src="/cetdabar/res/admin/plugins/jquery/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="/cetdabar/res/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/cetdabar/res/admin/dist/js/adminlte.min.js"></script>
+    <!-- Summernote -->
+    <script src="/cetdabar/res/admin/plugins/summernote/summernote-bs4.min.js"></script>
+    <script src="/cetdabar/res/admin/plugins/summernote/lang/summernote-pt-BR.min.js"></script>
+    <script src="/cetdabar/lib/Inputmask/dist/jquery.inputmask.min.js"></script>
+    <script src="/cetdabar/res/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Summernote
+            $('#artigo').summernote({
+                lang: "pt-BR"
+            })
+        });
+        document.querySelector('#imgcapa').addEventListener('change', function () {
+
+            var file = new FileReader();
+
+            file.onload = function () {
+
+                document.querySelector('.imgPreviewCapa').src = file.result;
+
+            }
+
+            file.readAsDataURL(this.files[0]);
+
+        });
+        document.querySelector('#imgbanner').addEventListener('change', function () {
+
+            var file = new FileReader();
+
+            file.onload = function () {
+
+                document.querySelector('.imgPreviewBanner').src = file.result;
+
+            }
+
+            file.readAsDataURL(this.files[0]);
+
+        });
+        bsCustomFileInput.init();
+    </script>
 </body>
 
 </html>

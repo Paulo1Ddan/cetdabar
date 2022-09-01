@@ -40,6 +40,16 @@
 
         //Cursos admin
         require_once "routes/admin/cursos.php";
+
+        //Blog admin
+        require_once "routes/admin/blog.php";
+        
+        //Turmas admin
+        require_once "routes/admin/class.php";
+        
+        //matricula admin
+        require_once "routes/admin/matricula.php";
+        
         $app->run();
 /*     }catch(\Throwable $th){
         //Not found

@@ -9,9 +9,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin - Dabar</title>
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -19,6 +20,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://kit.fontawesome.com/a9f506c8dd.js" crossorigin="anonymous"></script>
     <!-- Theme style -->
     <link rel="stylesheet" href="/cetdabar/res/admin/dist/css/adminlte.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="/cetdabar/res/admin/plugins/summernote/summernote-bs4.min.css">
+
+    <link rel="stylesheet" href="/cetdabar/res/admin/css/curso-admin.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -99,6 +104,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <!-- /.sidebar -->
         </aside>
 
+
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -106,13 +112,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Usuarios</h1>
+                            <h1 class="m-0">Turma</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="/cetdabar/">Home</a></li>
                                 <li class="breadcrumb-item active"><a href="/cetdabar/admin">Painel</a></li>
-                                <li class="breadcrumb-item active">Usuarios</li>
+                                <li class="breadcrumb-item active">Turmas</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -127,132 +133,92 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="col-12">
                             <div class="card card-primary">
                                 <div class="card-header">
-                                    <h3 class="card-title">Criar Usuario</h3>
+                                    <h3 class="card-title">Criar curso</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
-                                <form method="POST" action="/cetdabar/admin/users/user-add">
+                                <form method="POST" action="/cetdabar/admin/matricula/matricula-add">
                                     <div class="card-body">
-
-                                        <!-- Nome -->
-                                        <label for="nomeuser" class="form-label">Nome</label>
-                                        <div class="input-group mb-3">
+                                        <!-- Nome Usuario -->
+                                        <label>Nome do Usuário</label>
+                                        <div class="input-group mb-3" style="flex-wrap: nowrap;">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
                                             </div>
-                                            <input type="text" required name="nomeuser" id="nomeuser"
-                                                class="form-control" placeholder="Nome">
-                                        </div>
-
-                                        <!-- Email -->
-                                        <label for="emauluser" class="form-label">Email</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i
-                                                        class="fa-solid fa-envelope"></i></span>
-                                            </div>
-                                            <input type="email" required id="emailuser" name="emailuser"
-                                                class="form-control" placeholder="Email">
-                                        </div>
-
-                                        <!-- Senha -->
-                                        <label for="passuser" class="form-label">Senha</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                                            </div>
-                                            <input type="password" required id="passuser" name="passuser"
-                                                class="form-control" placeholder="Senha">
-                                        </div>
-
-                                        <!-- Tel. -->
-                                        <label class="form-label">Telefone</label>
-                                        <div class="row">
-                                            <div class="input-group col-lg-6 col-md-12 mb-3">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i
-                                                            class="bi bi-telephone-fill"></i></span>
-                                                </div>
-                                                <input type="tel" name="telfixo" class="form-control"
-                                                    placeholder="Tel. Fixo" id="telfixo">
-                                            </div>
-                                            <div class="input-group col-lg-6 col-md-12 mb-3">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i
-                                                            class="bi bi-phone-fill"></i></i></span>
-                                                </div>
-                                                <input type="tel" name="celuser" class="form-control"
-                                                    placeholder="Celular" required id="celuser">
-                                            </div>
-                                        </div>
-
-                                        <!-- Data Nasc. -->
-                                        <label for="datanasc" class="form-label">Data Nasc.</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i
-                                                        class="fa-solid fa-calendar-days"></i></span>
-                                            </div>
-                                            <input type="date" id="datanasc" name="datanasc" class="form-control"
-                                                placeholder="Data Nasc.">
-                                        </div>
-
-                                        <!-- Documentos -->
-                                        <label>Documentos</label>
-                                        <div class="row">
-                                            <div class="input-group col-lg-6 col-md-12 mb-3">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="bi bi-person-badge-fill"></i></span>
-                                                </div>
-                                                <input type="text" value="" name="documento" class="form-control" placeholder="Documento" id="documento" required>
-                                            </div>
-                                            <div class="input-group col-lg-6 col-md-12 mb-3">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
-                                                </div>
-                                                <input type="text" value="" name="cpf" class="form-control" placeholder="CPF" id="cpf" required>
-                                            </div>
-                                        </div>
-
-                                        <!-- Sexo -->
-                                        <label for="sexouser" class="form-label">Sexo</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa-solid fa-person-half-dress"></i></span>
-                                            </div>
-                                            <select class="form-control" name="sexouser" id="sexouser">
-                                                <option value="1">Masculino</option>
-                                                <option value="2">Feminino</option>
+                                            <select class="form-control js-example-basic-single" name="nameuser">
+                                                <?php $counter1=-1;  if( isset($datausers) && ( is_array($datausers) || $datausers instanceof Traversable ) && sizeof($datausers) ) foreach( $datausers as $key1 => $value1 ){ $counter1++; ?>
+                                                <option value="<?php echo htmlspecialchars( $value1["iduser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $value1["nomeuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
+                                                <?php } ?>
                                             </select>
                                         </div>
 
-                                        <!-- Estado Civil -->
-                                        <label for="maritalstates" class="form-label">Estado civíl</label>
-                                        <div class="input-group mb-3">
+                                        <!-- Curso -->
+                                        <label>Curso</label>
+                                        <div class="input-group mb-3" style="flex-wrap: nowrap;">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa-solid fa-ring"></i></span>
+                                                <span class="input-group-text"><i class="fa-solid fa-book"></i></span>
                                             </div>
-                                            <input type="text" required id="maritalstates" name="estadocivil"
-                                                class="form-control" placeholder="Estado Civil">
-                                        </div>
-
-                                        <!-- Categoria -->
-                                        <label for="catuser" class="form-label">Categoria</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa-solid fa-user-graduate"></i></span>
-                                            </div>
-                                            <select class="form-control" name="catuser" id="catuser">
-                                                <option value="1">Aluno</option>
-                                                <option value="2">Professor</option>
+                                            <select class="form-control js-example-basic-single" name="namecurso">
+                                                <?php $counter1=-1;  if( isset($datacursos) && ( is_array($datacursos) || $datacursos instanceof Traversable ) && sizeof($datacursos) ) foreach( $datacursos as $key1 => $value1 ){ $counter1++; ?>
+                                                <option value="<?php echo htmlspecialchars( $value1["idcurso"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $value1["nomecurso"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
+                                                <?php } ?>
                                             </select>
                                         </div>
 
-                                        <!-- Admin -->
-                                        <div class="form-check">
-                                            <input type="checkbox" name="admin" class="form-check-input" value="1" id="useradmin">
-                                            <label class="form-check-label" for="useradmin">Admin</label>
+                                        <!-- Turmas -->
+                                        <label>Turma</label>
+                                        <div class="input-group mb-3" style="flex-wrap: nowrap;">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-book"></i></span>
+                                            </div>
+                                            <select class="form-control js-example-basic-single" name="nameturma">
+                                                <?php $counter1=-1;  if( isset($dataturmas) && ( is_array($dataturmas) || $dataturmas instanceof Traversable ) && sizeof($dataturmas) ) foreach( $dataturmas as $key1 => $value1 ){ $counter1++; ?>
+                                                <option value="<?php echo htmlspecialchars( $value1["idturma"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $value1["nometurma"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
+                                                <?php } ?>
+                                            </select>
                                         </div>
+
+                                        <!-- Vencimento Boleto -->
+                                        <label for="vencimentoboleto" class="form-label">Dia de vencimento do
+                                            boleto</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
+                                            </div>
+                                            <select class="form-control" name="vencimentoboleto" id="vencimentoboleto">
+                                                <option value="5">Dia 5 de cada mês</option>
+                                                <option value="10">Dia 10 de cada mês</option>
+                                                <option value="15">Dia 15 de cada mês</option>
+                                                <option value="20">Dia 20 de cada mês</option>
+                                                <option value="20">Dia 25 de cada mês</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Data Cadastro -->
+                                        <label for="datamatricula" class="form-label">Data de Cadastro</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i
+                                                        class="fa-solid fa-calendar"></i></span>
+                                            </div>
+                                            <input type="date" id="datamatricula" class="form-control"
+                                                value="<?php echo htmlspecialchars( $todaydate, ENT_COMPAT, 'UTF-8', FALSE ); ?>" disabled>
+                                        </div>
+
+                                        <!-- Status -->
+                                        <label>Status</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-globe"></i></span>
+                                            </div>
+                                            <select class="form-control" name="statusmatricula" id="statusturma">
+                                                <option value="0">Inativa/Cancelada</option>
+                                                <option value="1">Aprovada</option>
+                                                <option value="2">Pendente</option>
+                                                <option value="3">Finalizada</option>
+                                            </select>
+                                        </div>
+
                                     </div>
                                     <!-- /.card-body -->
 
@@ -302,14 +268,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="/cetdabar/res/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/cetdabar/res/admin/dist/js/adminlte.min.js"></script>
-    <script src="/cetdabar/lib/Inputmask/dist/jquery.inputmask.min.js"></script>
+    <!-- Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#telfixo').inputmask("(99) 9999-9999")
-            $('#celuser').inputmask("(99) 99999-9999")
-            $('#cpf').inputmask("999.999.999-99")   
-            $('#documento').inputmask("99.999.999-9")   
-        })
+            $('.js-example-basic-single').select2();
+        });
     </script>
 </body>
 

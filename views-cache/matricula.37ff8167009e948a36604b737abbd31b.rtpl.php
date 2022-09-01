@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<?php if(!class_exists('Rain\Tpl')){exit;}?><!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
@@ -11,8 +11,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <title>Admin - Dabar</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="/cetdabar/res/admin/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
@@ -50,11 +49,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="/cetdabar/res/site/assets/user/{$user.imguser}" class="img-circle elevation-2"
+                        <img src="/cetdabar/res/site/assets/user/<?php echo htmlspecialchars( $user["imguser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="img-circle elevation-2"
                             alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">{$user.nomeuser}</a>
+                        <a href="#" class="d-block"><?php echo htmlspecialchars( $user["nomeuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?></a>
                     </div>
                 </div>
 
@@ -104,13 +103,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Usuarios</h1>
+                            <h1 class="m-0">Turmas</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="/cetdabar/">Home</a></li>
                                 <li class="breadcrumb-item active"><a href="/cetdabar/admin">Painel</a></li>
-                                <li class="breadcrumb-item active">Usuarios</li>
+                                <li class="breadcrumb-item active">Turmas</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -125,11 +124,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Usuarios cadastrados</h3>
+                                    <h3 class="card-title">Turmas cadastradas</h3>
 
                                     <div class="card-tools">
-                                        <div class="input-group input-group-sm" style="width: 150px;">
-                                            <a href="/cetdabar/admin/users/user-add" class="btn btn-primary">Cadastrar usuario</a>
+                                        <div class="input-group input-group-sm" style="width: 200px;">
+                                            <a href="/cetdabar/admin/matricula/matricula-add" class="btn btn-primary">Cadastrar Matricula</a>
                                         </div>
                                     </div>
                                 </div>
@@ -139,27 +138,49 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Nome</th>
-                                                <th>Email</th>
+                                                <th>Usuário</th>
+                                                <th>Curso</th>
+                                                <th>Turma</th>
+                                                <th>Vencimento do boleto</th>
+                                                <th>Data de Matricula</th>
                                                 <th>Status</th>
-                                                <th style="max-width: 80px !important; width: 80px;">Admin</th>
                                                 <th style="width: 200px;">Opções</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {loop="$users"}
+                                            <?php $counter1=-1;  if( isset($matricula) && ( is_array($matricula) || $matricula instanceof Traversable ) && sizeof($matricula) ) foreach( $matricula as $key1 => $value1 ){ $counter1++; ?>
+
+                                                <?php if( $value1["statusmatricula"] == 0 ){ ?>
+                                                    <?php $value1["statusmatricula"] = "Inativa/Cancelada"; ?>
+                                                <?php } ?>
+
+                                                <?php if( $value1["statusmatricula"] == 1 ){ ?>
+                                                    <?php $value1["statusmatricula"] = "Aprovada"; ?>
+                                                <?php } ?>
+
+                                                <?php if( $value1["statusmatricula"] == 2 ){ ?>
+                                                    <?php $value1["statusmatricula"] = "Pendente"; ?>
+                                                <?php } ?>
+
+                                                <?php if( $value1["statusmatricula"] == 3 ){ ?>
+                                                    <?php $value1["statusmatricula"] = "Finalizada"; ?>
+                                                <?php } ?>
+                                                
                                                 <tr>
-                                                    <td>{$value.iduser}</td>
-                                                    <td>{$value.nomeuser}</td>
-                                                    <td>{$value.emailuser}</td>
-                                                    <td><span class="tag tag-success">{$value.status}</span></td>
-                                                    <td>{$value.admin}</td>
-                                                    <td>                    
-                                                        <a href="/cetdabar/admin/users/{$value.iduser}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Editar</a>
-                                                        <a href="/cetdabar/admin/users/{$value.iduser}/delete"onclick="return confirm('Deseja realmente excluir este registro?')"class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Excluir</a>
+                                                    <td><?php echo htmlspecialchars( $value1["idmatricula"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+                                                    <td><?php echo htmlspecialchars( $value1["nomeuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+                                                    <td><?php echo htmlspecialchars( $value1["nomecurso"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+                                                    <td><?php echo htmlspecialchars( $value1["nometurma"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+                                                    <td><?php echo htmlspecialchars( $value1["vencimentoboleto"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+                                                    <td><?php echo htmlspecialchars( $value1["datamatricula"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+                                                    <td><?php echo htmlspecialchars( $value1["statusmatricula"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
+                                                    <td>     
+                                                        <a href="/cetdabar/admin/matricula/<?php echo htmlspecialchars( $value1["idmatricula"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> Ver Registro</a>               
+                                                        <a href="/cetdabar/admin/matricula/<?php echo htmlspecialchars( $value1["idmatricula"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Editar</a>
+                                                        <a href="/cetdabar/admin/matricula/<?php echo htmlspecialchars( $value1["idmatricula"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/delete"onclick="return confirm('Deseja realmente excluir este registro?')"class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Excluir</a>
                                                     </td>
                                                 </tr>
-                                            {/loop}
+                                            <?php } ?>
                                         </tbody>
                                     </table>
                                 </div>

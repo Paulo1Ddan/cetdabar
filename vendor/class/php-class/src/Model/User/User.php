@@ -8,7 +8,7 @@ use Class\Mailer;
 
 class User extends Model
 {
-    
+    const KEY = "CetDabar2007v!22";
     public static function login($login, $pass)
     {
         $sql = new Sql();

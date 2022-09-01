@@ -10,13 +10,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin - Dabar</title>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="/cetdabar/res/admin/plugins/fontawesome-free/css/all.min.css">
+    <script src="https://kit.fontawesome.com/a9f506c8dd.js" crossorigin="anonymous"></script>
     <!-- Theme style -->
     <link rel="stylesheet" href="/cetdabar/res/admin/dist/css/adminlte.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="/cetdabar/res/admin/plugins/summernote/summernote-bs4.min.css">
+
+    <link rel="stylesheet" href="/cetdabar/res/admin/css/curso-admin.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -104,13 +108,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Usuarios</h1>
+                            <h1 class="m-0">Turma</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="/cetdabar/">Home</a></li>
                                 <li class="breadcrumb-item active"><a href="/cetdabar/admin">Painel</a></li>
-                                <li class="breadcrumb-item active">Usuarios</li>
+                                <li class="breadcrumb-item active">Turmas</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -123,47 +127,65 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12">
-                            <div class="card">
+                            <div class="card card-primary">
                                 <div class="card-header">
-                                    <h3 class="card-title">Usuarios cadastrados</h3>
-
-                                    <div class="card-tools">
-                                        <div class="input-group input-group-sm" style="width: 150px;">
-                                            <a href="/cetdabar/admin/users/user-add" class="btn btn-primary">Cadastrar usuario</a>
-                                        </div>
-                                    </div>
+                                    <h3 class="card-title">Criar curso</h3>
                                 </div>
                                 <!-- /.card-header -->
-                                <div class="card-body table-responsive p-0">
-                                    <table class="table table-hover text-nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Nome</th>
-                                                <th>Email</th>
-                                                <th>Status</th>
-                                                <th style="max-width: 80px !important; width: 80px;">Admin</th>
-                                                <th style="width: 200px;">Opções</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php $counter1=-1;  if( isset($users) && ( is_array($users) || $users instanceof Traversable ) && sizeof($users) ) foreach( $users as $key1 => $value1 ){ $counter1++; ?>
-                                                <tr>
-                                                    <td><?php echo htmlspecialchars( $value1["iduser"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-                                                    <td><?php echo htmlspecialchars( $value1["nomeuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-                                                    <td><?php echo htmlspecialchars( $value1["emailuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-                                                    <td><span class="tag tag-success"><?php echo htmlspecialchars( $value1["status"], ENT_COMPAT, 'UTF-8', FALSE ); ?></span></td>
-                                                    <td><?php echo htmlspecialchars( $value1["admin"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
-                                                    <td>                    
-                                                        <a href="/cetdabar/admin/users/<?php echo htmlspecialchars( $value1["iduser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Editar</a>
-                                                        <a href="/cetdabar/admin/users/<?php echo htmlspecialchars( $value1["iduser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/delete"onclick="return confirm('Deseja realmente excluir este registro?')"class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Excluir</a>
-                                                    </td>
-                                                </tr>
-                                            <?php } ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <!-- /.card-body -->
+                                <!-- form start -->
+                                <form method="POST" action="/cetdabar/admin/class/<?php echo htmlspecialchars( $classdata["idturma"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
+                                    <div class="card-body">
+                                        <!-- Nome -->
+                                        <label for="nometurma" class="form-label">Nome da Turma</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-pencil"></i></span>
+                                            </div>
+                                            <input type="text" required name="nometurma" value="<?php echo htmlspecialchars( $classdata["nometurma"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" id="nometurma" class="form-control" placeholder="Nome da Turma">
+                                        </div>
+
+                                        <!-- Data -->
+                                        <label for="instrutorcurso" class="form-label">Data de Cadastro</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-graduation-cap"></i></span>
+                                            </div>
+                                            <input type="date" disabled id="datacad" value="<?php echo htmlspecialchars( $classdata["datacadturma"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="form-control" placeholder="Data de cadastro">
+                                        </div>
+
+                                        <!-- Status -->
+                                        <label>Status</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-globe"></i></span>
+                                            </div>
+                                            <select class="form-control" name="statusturma" id="statusturma">
+                                                <?php if( $classdata["statusturma"] == 0 ){ ?>
+                                                    <option value="0">Inativo</option>
+                                                <?php } ?>
+                                                <?php if( $classdata["statusturma"] == 1 ){ ?>
+                                                    <option value="1">Ativo</option>
+                                                <?php } ?>
+                                                <?php if( $classdata["statusturma"] == 2 ){ ?>
+                                                    <option value="2">Pendente</option>
+                                                <?php } ?>
+                                                <?php if( $classdata["statusturma"] == 3 ){ ?>
+                                                    <option value="3">Completa</option>
+                                                <?php } ?>
+                                                <?php $counter1=-1;  if( isset($statusturma) && ( is_array($statusturma) || $statusturma instanceof Traversable ) && sizeof($statusturma) ) foreach( $statusturma as $key1 => $value1 ){ $counter1++; ?>
+                                                    <?php if( $value1["value"] != $classdata["statusturma"] ){ ?>
+                                                        <option value="<?php echo htmlspecialchars( $value1["value"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $value1["name"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- /.card-body -->
+
+                                    <div class="card-footer">
+                                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                                    </div>
+                                </form>
                             </div>
                             <!-- /.card -->
                         </div>
@@ -201,11 +223,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- REQUIRED SCRIPTS -->
 
     <!-- jQuery -->
-    <script src="/cetdabar/res/admin/plugins/jquery/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="/cetdabar/res/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/cetdabar/res/admin/dist/js/adminlte.min.js"></script>
+    <!-- Summernote -->
+    <script src="/cetdabar/res/admin/plugins/summernote/summernote-bs4.min.js"></script>
+    <script src="/cetdabar/res/admin/plugins/summernote/lang/summernote-pt-BR.min.js"></script>
+    
+
+    <script src="/cetdabar/lib/Inputmask/dist/jquery.inputmask.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            // Summernote
+            $('#descricaocurso').summernote({
+                lang: "pt-BR"
+            })
+        });
+        document.querySelector('#imgcurso').addEventListener('change', function () {
+
+            var file = new FileReader();
+
+            file.onload = function () {
+
+            document.querySelector('.imgPreview').src = file.result;
+
+            }
+
+            file.readAsDataURL(this.files[0]);
+
+        });
+    </script>
 </body>
 
 </html>

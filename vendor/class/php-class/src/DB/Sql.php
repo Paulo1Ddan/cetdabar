@@ -28,23 +28,28 @@
 
         public function query($sql, $params = array())
         {
-            $stmt = $this->conn->prepare($sql);
-            $this->setParams($stmt, $params);
-
-            if($stmt->execute()){
+            try{
+                $stmt = $this->conn->prepare($sql);
+                $this->setParams($stmt, $params);
+    
+                $stmt->execute();
                 return true;
-            }else{
+            }catch(\PDOException $e){
                 return false;
             }
         }
 
         public function select($sql, $params = array())
         {
-            $stmt = $this->conn->prepare($sql);
-            $this->setParams($stmt, $params);
-            $stmt->execute();
-
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            try{
+                $stmt = $this->conn->prepare($sql);
+                $this->setParams($stmt, $params);
+                $stmt->execute();
+    
+                return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            }catch(\PDOException $e){
+                return false;
+            }
         }
 
         public function insert($sql, $params = array())

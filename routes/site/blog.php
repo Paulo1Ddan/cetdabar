@@ -22,7 +22,7 @@
         $blog = Blog::listAll();
         
         for($i = 0; $i < count($blog); $i++){
-            $blog[$i]['artigo'] = mb_strimwidth($blog[$i]['artigo'], 0, 300, '...');
+            $blog[$i]['artigo'] = mb_strimwidth($blog[$i]['artigo'], 0, 500, '...');
         }
 
         $page->setTpl('blog', array(
@@ -31,7 +31,6 @@
 
         return $response;
     });
-
     $app->get("/cetdabar/blog/{idArtigo}", function (Request $request, Response $response, $args){
         if(isset($_SESSION['logado']) && $_SESSION['logado'] === true){
             $login = "online";
@@ -50,7 +49,7 @@
 
         $artigo = new Blog();
 
-        $data = $artigo->getArtigo($idArtigo);
+        $data = $artigo->getBlog($idArtigo);
 
         $page->setTpl("blog-list", array(
             "artigo" => $data

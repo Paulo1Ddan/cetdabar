@@ -5,6 +5,7 @@
     use Class\Model\Cursos\Cursos;
     use Class\Model\User\User;
     use Class\Model\Blog\Blog;
+    use Class\Model\Turmas\Turmas;
     use Class\PageAdmin;
 
     $app->get('/cetdabar/admin', function (Request $request, Response $response){
@@ -28,6 +29,8 @@
 
         $qtdArtigos = count(Blog::listAllAdmin());
 
+        $qtdTurmas = count(Turmas::listAll());
+
         $page = new PageAdmin(array(
             "header" => false,
             "footer" => false,
@@ -39,7 +42,8 @@
         $page->setTpl("index", array(
             "qtdUsers" => $qtdUsers,
             "qtdCursos" => $qtdCursos,
-            "qtdArtigos" => $qtdArtigos
+            "qtdArtigos" => $qtdArtigos,
+            "qtdTurmas" => $qtdTurmas
         ));
 
         return $response;

@@ -6,8 +6,8 @@
     use PHPMailer\PHPMailer\SMTP;
 
     class Mailer{
-        const USERNAME = "teste.paulo.daniel@outlook.com";
-        const PASSWORD = "TesteMail442";
+        const USERNAME = "teste.paulo.daniel@gmail.com";
+        const PASSWORD = "vqvhfkjwsffjevzz";
         const NAMEFROM = "Suporte CETDABAR";
 
         private $mail;
@@ -20,13 +20,14 @@
             try{
 
                 $this->mail->isSMTP();
+                $this->mail->SMTPDebug = SMTP::DEBUG_SERVER;
                 $this->mail->CharSet = "UTF-8";
-                $this->mail->Host = "smtp.office365.com";
+                $this->mail->Host = "smtp.gmail.com";
                 $this->mail->SMTPAuth = true;
-                $this->mail->SMTPSecure = "tls";
+                $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
                 $this->mail->Username = Mailer::USERNAME;
                 $this->mail->Password = Mailer::PASSWORD;
-                $this->mail->Port = 587;
+                $this->mail->Port = 465;
 
                 $this->mail->setFrom(Mailer::USERNAME, Mailer::NAMEFROM);
                 $this->mail->addAddress($toAddress, $toName);

@@ -8,7 +8,7 @@
     class Mailer{
         const USERNAME = "teste.paulo.daniel@gmail.com";
         const PASSWORD = "vqvhfkjwsffjevzz";
-        const NAMEFROM = "Suporte CETDABAR";
+        const NAMEFROM = "Suporte Educacional CETDABAR";
 
         private $mail;
 

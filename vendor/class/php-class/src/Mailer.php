@@ -6,8 +6,8 @@
     use PHPMailer\PHPMailer\SMTP;
 
     class Mailer{
-        const USERNAME = "teste.paulo.daniel@gmail.com";
-        const PASSWORD = "vqvhfkjwsffjevzz";
+        const USERNAME = "";
+        const PASSWORD = "";
         const NAMEFROM = "Suporte Educacional CETDABAR";
 
         private $mail;

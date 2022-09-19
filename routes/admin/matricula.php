@@ -79,7 +79,7 @@
         return $response;
     });
     $app->post("/cetdabar/admin/matricula/matricula-add", function (Request $request, Response $response){
-        var_dump($_POST);
+
         return $response;
     })
 ?>

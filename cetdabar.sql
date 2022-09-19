@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 01-Set-2022 às 12:16
+-- Tempo de geração: 19-Set-2022 às 06:45
 -- Versão do servidor: 10.4.24-MariaDB
 -- versão do PHP: 8.1.6
 
@@ -11,8 +11,6 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-CREATE DATABASE cetdabar;
-USE cetdabar;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -243,7 +241,8 @@ INSERT INTO `user` (`iduser`, `nomeuser`, `emailuser`, `passuser`, `imguser`, `t
 (1, 'Paulo Daniel Nascimento da Palma', 'paulodaniel1360@gmail.com', '$2y$12$Jkaek3yS0Ta.yqguJ31C6eeB2ZQq7iMgzdywR1k/L/2TcknP8xNLq', 'nezuko.jpg', '(11) 1111-1111', '(11) 93054-6947', '2002-05-10', '1', 'Solteiro', NULL, NULL, NULL, '11.111.111-1', '343.499.350-96', NULL, NULL, NULL, NULL, '', NULL, NULL, '1', '1', 1, '2022-07-28 22:05:11'),
 (2, 'Fernando da Silva', 'fernandodasilva@gmail.com', '$2y$12$Jkaek3yS0Ta.yqguJ31C6eeB2ZQq7iMgzdywR1k/L/2TcknP8xNLq', 'nezuko.jpg', NULL, '(11) 93054-6947', '2002-05-10', '1', 'Casado', NULL, NULL, NULL, '11.111.111-1', '797.354.210-89', NULL, NULL, NULL, NULL, '', NULL, NULL, '0', '1', 0, '2022-07-28 22:05:11'),
 (11, 'Carlos Henrique', 'carloshenrique@gmail.com', '$2y$12$qCOz2A5cFcYFOFZNIEYpSe6XwsWnSAoskWWn92JOxpz0oUXlgbSY6', 'default.svg', '(11) 1111-1111', '(11) 11111-1111', '2002-05-10', '1', 'Solteiro', NULL, NULL, NULL, '11.111.111-1', '391.388.440-87', NULL, NULL, NULL, NULL, '', NULL, NULL, '0', '1', 1, '2022-07-28 23:09:28'),
-(17, 'Fabio Santos', 'fabiosantos@gmail.com', '$2y$12$Jzh7zZwqcgfbFsZTOYPIJeSirGs5ek9Tj7Yflwud1668s3Bnf0eFS', 'default.svg', '(11) 1111-1111', '(11) 11111-1111', '2002-05-10', '1', 'Casado', NULL, NULL, NULL, '11.111.111-1', '903.382.680-14', NULL, NULL, NULL, NULL, '', NULL, NULL, '1', '2', 1, '2022-08-02 01:00:08');
+(17, 'Fabio Santos', 'fabiosantos@gmail.com', '$2y$12$Jzh7zZwqcgfbFsZTOYPIJeSirGs5ek9Tj7Yflwud1668s3Bnf0eFS', 'default.svg', '(11) 1111-1111', '(11) 11111-1111', '2002-05-10', '1', 'Casado', NULL, NULL, NULL, '11.111.111-1', '903.382.680-14', NULL, NULL, NULL, NULL, '', NULL, NULL, '1', '2', 1, '2022-08-02 01:00:08'),
+(18, 'Ricardo Milos', 'rico.milos@gmail.com', '$2y$12$wcFDyWp9a5n.YUAp4sm1G.L7i1PntzMgHMykhuj0gGTd29BgKzRmC', 'default.svg', '(11) 1111-1111', '(11) 11111-1111', '2002-05-10', '1', 'Casado', NULL, NULL, NULL, '11.111.111-1', '236.042.450-52', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', '1', 1, '2022-09-15 00:33:03');
 
 -- --------------------------------------------------------
 
@@ -402,7 +401,7 @@ ALTER TABLE `turma`
 -- AUTO_INCREMENT de tabela `user`
 --
 ALTER TABLE `user`
-  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de tabela `userrecoverypass`

@@ -18,9 +18,9 @@
                 $_SESSION['alert'] = "<script>alert('Não foi possível carregar dados de matrícula');history.back();</script>";
                 return false;
             }
-
         }
 
+        
     }
 
 ?>

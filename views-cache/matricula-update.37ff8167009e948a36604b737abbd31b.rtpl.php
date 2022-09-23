@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<?php if(!class_exists('Rain\Tpl')){exit;}?><!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
@@ -57,11 +57,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="/cetdabar/res/site/assets/user/{$user.imguser}" class="img-circle elevation-2"
+                        <img src="/cetdabar/res/site/assets/user/<?php echo htmlspecialchars( $user["imguser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="img-circle elevation-2"
                             alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">{$user.nomeuser}</a>
+                        <a href="#" class="d-block"><?php echo htmlspecialchars( $user["nomeuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?></a>
                     </div>
                 </div>
 
@@ -137,7 +137,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
-                                <form method="POST" action="/cetdabar/admin/matricula/matricula-add">
+                                <form method="POST" action="/cetdabar/admin/matricula/matricula-update/<?php echo htmlspecialchars( $datamatricula["idmatricula"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
                                     <div class="card-body">
                                         <!-- Nome Usuario -->
                                         <label>Nome do Usuário</label>
@@ -145,10 +145,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
                                             </div>
-                                            <select class="form-control js-example-basic-single" name="nameuser">
-                                                {loop="$datausers"}
-                                                <option value="{$value.iduser}">{$value.nomeuser}</option>
-                                                {/loop}
+                                            <select class="form-control js-example-basic-single" name="nameuser" disabled>
+                                                <option value="<?php echo htmlspecialchars( $datamatricula["iduser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $datamatricula["nomeuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
+                                                <?php $counter1=-1;  if( isset($datausers) && ( is_array($datausers) || $datausers instanceof Traversable ) && sizeof($datausers) ) foreach( $datausers as $key1 => $value1 ){ $counter1++; ?>
+                                                    <?php if( $datamatricula["iduser"] != $value1["iduser"] ){ ?>
+                                                        <option value="<?php echo htmlspecialchars( $value1["iduser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $value1["nomeuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
+                                                    <?php } ?>
+                                                <?php } ?>
                                             </select>
                                         </div>
 
@@ -158,10 +161,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa-solid fa-book"></i></span>
                                             </div>
-                                            <select class="form-control js-example-basic-single" name="namecurso">
-                                                {loop="$datacursos"}
-                                                <option value="{$value.idcurso}">{$value.nomecurso}</option>
-                                                {/loop}
+                                            <select class="form-control js-example-basic-single" name="namecurso" disabled>
+                                                <option value="<?php echo htmlspecialchars( $datamatricula["idcurso"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $datamatricula["nomecurso"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
+                                                <?php $counter1=-1;  if( isset($datacursos) && ( is_array($datacursos) || $datacursos instanceof Traversable ) && sizeof($datacursos) ) foreach( $datacursos as $key1 => $value1 ){ $counter1++; ?>
+                                                    <?php if( $datamatricula["idcurso"] != $value1["idcurso"] ){ ?>
+                                                        <option value="<?php echo htmlspecialchars( $value1["idcurso"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $value1["nomecurso"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
+                                                    <?php } ?>
+                                                <?php } ?>
                                             </select>
                                         </div>
 
@@ -172,9 +178,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <span class="input-group-text"><i class="fa-solid fa-book"></i></span>
                                             </div>
                                             <select class="form-control js-example-basic-single" name="nameturma">
-                                                {loop="$dataturmas"}
-                                                <option value="{$value.idturma}">{$value.nometurma}</option>
-                                                {/loop}
+                                                <option value="<?php echo htmlspecialchars( $datamatricula["idturma"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $datamatricula["nometurma"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
+                                                <?php $counter1=-1;  if( isset($dataturmas) && ( is_array($dataturmas) || $dataturmas instanceof Traversable ) && sizeof($dataturmas) ) foreach( $dataturmas as $key1 => $value1 ){ $counter1++; ?>
+                                                    <?php if( $datamatricula["idturma"] != $value1["idturma"] ){ ?>
+                                                        <option value="<?php echo htmlspecialchars( $value1["idturma"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $value1["nometurma"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
+                                                    <?php } ?>
+                                                <?php } ?>
                                             </select>
                                         </div>
 
@@ -186,11 +195,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
                                             </div>
                                             <select class="form-control" name="vencimentoboleto" id="vencimentoboleto">
-                                                <option value="1">Dia 5 de cada mês</option>
-                                                <option value="2">Dia 10 de cada mês</option>
-                                                <option value="3">Dia 15 de cada mês</option>
-                                                <option value="4">Dia 20 de cada mês</option>
-                                                <option value="5">Dia 25 de cada mês</option>
+                                                <?php if( $datamatricula["vencimentoboleto"] == 1 ){ ?>
+                                                    <option value="1">Dia 5 de cada mês</option>
+                                                <?php } ?>
+                                                <?php if( $datamatricula["vencimentoboleto"] == 2 ){ ?>
+                                                    <option value="2">Dia 10 de cada mês</option>
+                                                <?php } ?>
+                                                <?php if( $datamatricula["vencimentoboleto"] == 3 ){ ?>
+                                                    <option value="3">Dia 15 de cada mês</option>
+                                                <?php } ?>
+                                                <?php if( $datamatricula["vencimentoboleto"] == 4 ){ ?>
+                                                    <option value="4">Dia 20 de cada mês</option>
+                                                <?php } ?>
+                                                <?php if( $datamatricula["vencimentoboleto"] == 5 ){ ?>
+                                                    <option value="5">Dia 25 de cada mês</option>
+                                                <?php } ?>
+                                                <?php $counter1=-1;  if( isset($vencimentoboleto) && ( is_array($vencimentoboleto) || $vencimentoboleto instanceof Traversable ) && sizeof($vencimentoboleto) ) foreach( $vencimentoboleto as $key1 => $value1 ){ $counter1++; ?>
+                                                    <?php if( $datamatricula["vencimentoboleto"] != $value1["value"] ){ ?>
+                                                        <option value="<?php echo htmlspecialchars( $value1["value"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $value1["name"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
+                                                    <?php } ?>
+                                                <?php } ?>
                                             </select>
                                         </div>
 
@@ -198,10 +222,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <label for="datamatricula" class="form-label">Data de Cadastro</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text"><i
-                                                        class="fa-solid fa-calendar"></i></span>
+                                                <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
                                             </div>
-                                            <input type="date" id="datamatricula" class="form-control" disabled value="{$todaydate}">
+                                            <input type="date" id="datamatricula" class="form-control" disabled value="<?php echo htmlspecialchars( $datamatricula["datamatricula"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
                                         </div>
 
                                         <!-- Status -->
@@ -211,10 +234,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <span class="input-group-text"><i class="fa-solid fa-globe"></i></span>
                                             </div>
                                             <select class="form-control" name="statusmatricula" id="statusturma">
-                                                <option value="0">Inativa/Cancelada</option>
-                                                <option value="1">Aprovada</option>
-                                                <option value="2">Pendente</option>
-                                                <option value="3">Finalizada</option>
+                                                <?php if( $datamatricula["statusmatricula"] == 0 ){ ?>
+                                                    <option value="0">Inativa/Cancelada</option>
+                                                <?php } ?>
+                                                <?php if( $datamatricula["statusmatricula"] == 1 ){ ?>
+                                                    <option value="1">Aprovada</option>
+                                                <?php } ?>
+                                                <?php if( $datamatricula["statusmatricula"] == 2 ){ ?>
+                                                    <option value="2">Pendente</option>
+                                                <?php } ?>
+                                                <?php if( $datamatricula["statusmatricula"] == 3 ){ ?>
+                                                    <option value="3">Finalizada</option>
+                                                <?php } ?>
+                                                <?php $counter1=-1;  if( isset($statusmatricula) && ( is_array($statusmatricula) || $statusmatricula instanceof Traversable ) && sizeof($statusmatricula) ) foreach( $statusmatricula as $key1 => $value1 ){ $counter1++; ?>
+                                                    <?php if( $datamatricula["statusmatricula"] != $value1["value"] ){ ?>
+                                                        <option value="<?php echo htmlspecialchars( $value1["value"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"><?php echo htmlspecialchars( $value1["name"], ENT_COMPAT, 'UTF-8', FALSE ); ?></option>
+                                                    <?php } ?>
+                                                <?php } ?>
                                             </select>
                                         </div>
 
@@ -222,7 +258,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <!-- /.card-body -->
 
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                                        <button type="submit" class="btn btn-primary">Atualizar</button>
                                     </div>
                                 </form>
                             </div>

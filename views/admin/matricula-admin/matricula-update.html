@@ -137,7 +137,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
-                                <form method="POST" action="/cetdabar/admin/matricula/matricula-add">
+                                <form method="POST" action="/cetdabar/admin/matricula/matricula-update/{$datamatricula.idmatricula}">
                                     <div class="card-body">
                                         <!-- Nome Usuario -->
                                         <label>Nome do Usuário</label>
@@ -145,9 +145,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
                                             </div>
-                                            <select class="form-control js-example-basic-single" name="nameuser">
+                                            <select class="form-control js-example-basic-single" name="nameuser" disabled>
+                                                <option value="{$datamatricula.iduser}">{$datamatricula.nomeuser}</option>
                                                 {loop="$datausers"}
-                                                <option value="{$value.iduser}">{$value.nomeuser}</option>
+                                                    {if="$datamatricula.iduser != $value.iduser"}
+                                                        <option value="{$value.iduser}">{$value.nomeuser}</option>
+                                                    {/if}
                                                 {/loop}
                                             </select>
                                         </div>
@@ -158,9 +161,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa-solid fa-book"></i></span>
                                             </div>
-                                            <select class="form-control js-example-basic-single" name="namecurso">
+                                            <select class="form-control js-example-basic-single" name="namecurso" disabled>
+                                                <option value="{$datamatricula.idcurso}">{$datamatricula.nomecurso}</option>
                                                 {loop="$datacursos"}
-                                                <option value="{$value.idcurso}">{$value.nomecurso}</option>
+                                                    {if="$datamatricula.idcurso != $value.idcurso"}
+                                                        <option value="{$value.idcurso}">{$value.nomecurso}</option>
+                                                    {/if}
                                                 {/loop}
                                             </select>
                                         </div>
@@ -172,8 +178,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <span class="input-group-text"><i class="fa-solid fa-book"></i></span>
                                             </div>
                                             <select class="form-control js-example-basic-single" name="nameturma">
+                                                <option value="{$datamatricula.idturma}">{$datamatricula.nometurma}</option>
                                                 {loop="$dataturmas"}
-                                                <option value="{$value.idturma}">{$value.nometurma}</option>
+                                                    {if="$datamatricula.idturma != $value.idturma"}
+                                                        <option value="{$value.idturma}">{$value.nometurma}</option>
+                                                    {/if}
                                                 {/loop}
                                             </select>
                                         </div>
@@ -186,11 +195,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
                                             </div>
                                             <select class="form-control" name="vencimentoboleto" id="vencimentoboleto">
-                                                <option value="1">Dia 5 de cada mês</option>
-                                                <option value="2">Dia 10 de cada mês</option>
-                                                <option value="3">Dia 15 de cada mês</option>
-                                                <option value="4">Dia 20 de cada mês</option>
-                                                <option value="5">Dia 25 de cada mês</option>
+                                                {if="$datamatricula.vencimentoboleto == 1"}
+                                                    <option value="1">Dia 5 de cada mês</option>
+                                                {/if}
+                                                {if="$datamatricula.vencimentoboleto == 2"}
+                                                    <option value="2">Dia 10 de cada mês</option>
+                                                {/if}
+                                                {if="$datamatricula.vencimentoboleto == 3"}
+                                                    <option value="3">Dia 15 de cada mês</option>
+                                                {/if}
+                                                {if="$datamatricula.vencimentoboleto == 4"}
+                                                    <option value="4">Dia 20 de cada mês</option>
+                                                {/if}
+                                                {if="$datamatricula.vencimentoboleto == 5"}
+                                                    <option value="5">Dia 25 de cada mês</option>
+                                                {/if}
+                                                {loop="$vencimentoboleto"}
+                                                    {if="$datamatricula.vencimentoboleto != $value.value"}
+                                                        <option value="{$value.value}">{$value.name}</option>
+                                                    {/if}
+                                                {/loop}
                                             </select>
                                         </div>
 
@@ -198,10 +222,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <label for="datamatricula" class="form-label">Data de Cadastro</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text"><i
-                                                        class="fa-solid fa-calendar"></i></span>
+                                                <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
                                             </div>
-                                            <input type="date" id="datamatricula" class="form-control" disabled value="{$todaydate}">
+                                            <input type="date" id="datamatricula" class="form-control" disabled value="{$datamatricula.datamatricula}">
                                         </div>
 
                                         <!-- Status -->
@@ -211,10 +234,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <span class="input-group-text"><i class="fa-solid fa-globe"></i></span>
                                             </div>
                                             <select class="form-control" name="statusmatricula" id="statusturma">
-                                                <option value="0">Inativa/Cancelada</option>
-                                                <option value="1">Aprovada</option>
-                                                <option value="2">Pendente</option>
-                                                <option value="3">Finalizada</option>
+                                                {if="$datamatricula.statusmatricula == 0"}
+                                                    <option value="0">Inativa/Cancelada</option>
+                                                {/if}
+                                                {if="$datamatricula.statusmatricula == 1"}
+                                                    <option value="1">Aprovada</option>
+                                                {/if}
+                                                {if="$datamatricula.statusmatricula == 2"}
+                                                    <option value="2">Pendente</option>
+                                                {/if}
+                                                {if="$datamatricula.statusmatricula == 3"}
+                                                    <option value="3">Finalizada</option>
+                                                {/if}
+                                                {loop="$statusmatricula"}
+                                                    {if="$datamatricula.statusmatricula != $value.value"}
+                                                        <option value="{$value.value}">{$value.name}</option>
+                                                    {/if}
+                                                {/loop}
                                             </select>
                                         </div>
 
@@ -222,7 +258,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <!-- /.card-body -->
 
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                                        <button type="submit" class="btn btn-primary">Atualizar</button>
                                     </div>
                                 </form>
                             </div>

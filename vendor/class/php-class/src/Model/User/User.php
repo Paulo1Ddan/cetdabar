@@ -146,6 +146,8 @@ class User extends Model
         return $result;
     }
 
+
+
     public function get($iduser)
     {
         $sql = new Sql();

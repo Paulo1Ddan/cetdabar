@@ -161,8 +161,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <span class="input-group-text"><i class="fa-solid fa-globe"></i></span>
                                             </div>
                                             <select class="form-control" name="statusturma" id="statusturma">
-                                                <option value="1">Ativo</option>
                                                 <option value="0">Inativo</option>
+                                                <option value="1">Ativo</option>
+                                                <option value="2">Pendente</option>
+                                                <option value="3">Completa</option>
+
                                             </select>
                                         </div>
                                     </div>

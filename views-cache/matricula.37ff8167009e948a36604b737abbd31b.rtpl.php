@@ -176,7 +176,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                     <td><?php echo htmlspecialchars( $value1["statusmatricula"], ENT_COMPAT, 'UTF-8', FALSE ); ?></td>
                                                     <td>     
                                                         <a href="/cetdabar/admin/matricula/<?php echo htmlspecialchars( $value1["idmatricula"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> Ver Registro</a>               
-                                                        <a href="/cetdabar/admin/matricula/<?php echo htmlspecialchars( $value1["idmatricula"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Editar</a>
+                                                        <a href="/cetdabar/admin/matricula/matricula-update/<?php echo htmlspecialchars( $value1["idmatricula"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Editar</a>
                                                         <a href="/cetdabar/admin/matricula/<?php echo htmlspecialchars( $value1["idmatricula"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/delete"onclick="return confirm('Deseja realmente excluir este registro?')"class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Excluir</a>
                                                     </td>
                                                 </tr>

@@ -186,11 +186,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
                                             </div>
                                             <select class="form-control" name="vencimentoboleto" id="vencimentoboleto">
-                                                <option value="5">Dia 5 de cada mês</option>
-                                                <option value="10">Dia 10 de cada mês</option>
-                                                <option value="15">Dia 15 de cada mês</option>
-                                                <option value="20">Dia 20 de cada mês</option>
-                                                <option value="20">Dia 25 de cada mês</option>
+                                                <option value="1">Dia 5 de cada mês</option>
+                                                <option value="2">Dia 10 de cada mês</option>
+                                                <option value="3">Dia 15 de cada mês</option>
+                                                <option value="4">Dia 20 de cada mês</option>
+                                                <option value="5">Dia 25 de cada mês</option>
                                             </select>
                                         </div>
 
@@ -201,8 +201,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <span class="input-group-text"><i
                                                         class="fa-solid fa-calendar"></i></span>
                                             </div>
-                                            <input type="date" id="datamatricula" class="form-control"
-                                                value="<?php echo htmlspecialchars( $todaydate, ENT_COMPAT, 'UTF-8', FALSE ); ?>" disabled>
+                                            <input type="date" id="datamatricula" class="form-control" disabled value="<?php echo htmlspecialchars( $todaydate, ENT_COMPAT, 'UTF-8', FALSE ); ?>">
                                         </div>
 
                                         <!-- Status -->

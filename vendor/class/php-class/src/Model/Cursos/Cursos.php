@@ -11,12 +11,13 @@
             $sql = new Sql;
             return $sql->select('SELECT * FROM curso WHERE statuscurso = 1 ORDER BY nomecurso LIMIT 5');
         }
-
         public static function listCursosAdmin()
         {
             $sql = new Sql();
             return $sql->select('SELECT * FROM curso');        
         }
+
+
 
         public function getCurso($idCurso)
         {

@@ -146,8 +146,6 @@ class User extends Model
         return $result;
     }
 
-
-
     public function get($iduser)
     {
         $sql = new Sql();
@@ -157,6 +155,22 @@ class User extends Model
         ));
 
         return $result[0];
+    }
+
+    public function getAddrUser($iduser){
+        $sql = new Sql();
+
+        $result = $sql->select("SELECT * FROM `addressuser` WHERE iduser = :id", array(
+            ":id" => $iduser
+        ));
+        return $result[0];      
+    }
+
+    public function getLastUser(){
+        $sql = new Sql();
+
+        $result = $sql->select("SELECT iduser, nomeuser FROM user WHERE iduser = LAST_INSERT_ID()");
+        return $result[0];      
     }
 
     public function upatePass()
@@ -294,6 +308,10 @@ class User extends Model
 
         $data['passuser'] = password_hash($data['passuser'], PASSWORD_DEFAULT, ['cost' => 12]);
 
+        if(empty($data['complementouser'])){
+            $data['complementouser'] = NULL;
+        }
+
         if (!empty($data['telfixo'])) {
             $result = $sql->query("INSERT INTO user (nomeuser, emailuser, passuser, imguser, telfixouser, celuser, datanasc, sexouser, estadocivil, documento, cpf, admin, catuser, status) VALUES (:nomeuser, :emailuser, :passuser, :imguser, :telfixo, :celuser, :datanasc, :sexouser, :estadocivil, :documento, :cpf, :admin, :catuser, :status)", array(
                 ":nomeuser" => $data['nomeuser'],
@@ -311,6 +329,17 @@ class User extends Model
                 ":catuser" => $data['catuser'],
                 ":status" => 1
             ));
+            $lastuser = $sql->select("SELECT iduser, nomeuser FROM user WHERE iduser = LAST_INSERT_ID()");
+            $iduser = $lastuser[0];
+            $result = $sql->query("INSERT INTO `addressuser`(`cepuser`, `addressuser`, `bairrouser`, `cidadeuser`, `numerouser`, `complementouser`, `iduser`) VALUES (:cep,:address,:bairro,:cidade,:numero,:complemento,:id)", array(
+                ":cep" => $data['cepuser'],
+                ":address" => $data['addressuser'],
+                ":bairro" => $data['bairrouser'],
+                ":cidade" => $data['cidadeuser'],
+                ":numero" => $data['numerouser'],
+                ":complemento" => $data['complementouser'],
+                ":id" => $iduser['iduser'],
+            ));
         } else {
             $result = $sql->query("INSERT INTO user (nomeuser, emailuser, passuser, imguser, celuser, datanasc, sexouser, estadocivil, documento, cpf, admin, catuser, status) VALUES (:nomeuser, :emailuser, :passuser, :imguser, :datanasc, :sexouser, :estadocivil, :documento, :cpf, :admin, :catuser, :status)", array(
                 ":nomeuser" => $data['nomeuser'],
@@ -327,7 +356,20 @@ class User extends Model
                 ":catuser" => $data['catuser'],
                 ":status" => 1
             ));
+            $lastuser = $sql->select("SELECT iduser, nomeuser FROM user WHERE iduser = LAST_INSERT_ID()");
+            $iduser = $lastuser[0]; 
+            $result = $sql->query("INSERT INTO `addressuser`(`cepuser`, `addressuser`, `bairrouser`, `cidadeuser`, `numerouser`, `complementouser`, `iduser`) VALUES (:cep,:address,:bairro,:cidade,:numero,:complemento,:id)", array(
+                ":cep" => $data['cepuser'],
+                ":address" => $data['addressuser'],
+                ":bairro" => $data['bairrouser'],
+                ":cidade" => $data['cidadeuser'],
+                ":numero" => $data['numerouser'],
+                ":complemento" => $data['complementouser'],
+                ":id" => $iduser['iduser'],
+            ));
+
         }
+
 
         if ($result) {
             $_SESSION['alert'] = "<script>alert('Usuario criado com sucesso');</script>";
@@ -382,6 +424,27 @@ class User extends Model
         } else {
             $_SESSION['alert'] = "<script>alert('Não foi possível atualizar o usuario');</script>";
             return true;
+        }
+    }
+    
+    public function updateAddress($iduser)
+    {
+        $sql = new Sql();
+        $result = $sql->query("UPDATE `addressuser` SET `cepuser`= :cep,`addressuser`= :address,`bairrouser`= :bairro,`cidadeuser`= :cidade,`numerouser`= :numero,`complementouser`= :complemento WHERE `iduser`= :id", array(
+            ":cep" => $this->getcepuser(),
+            ":address" => $this->getaddressuser(),
+            ":bairro" => $this->getbairrouser(),
+            ":cidade" => $this->getcidadeuser(),
+            ":numero" => $this->getnumerouser(),
+            ":complemento" => $this->getcomplementouser(),
+            ":id" => $iduser
+        ));
+        if($result){
+            /* $_SESSION['alert'] = "<script>alert('Endereço atualizado com sucesso!')</script>"; */
+            return true;
+        }else{
+            /* $_SESSION['alert'] = "<script>alert('Não foi possível atualziar o endereço!')</script>"; */
+            return false;
         }
     }
 

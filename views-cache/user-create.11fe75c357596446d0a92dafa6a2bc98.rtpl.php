@@ -202,15 +202,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <div class="row">
                                             <div class="input-group col-lg-6 col-md-12 mb-3">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="bi bi-person-badge-fill"></i></span>
+                                                    <span class="input-group-text"><i
+                                                            class="bi bi-person-badge-fill"></i></span>
                                                 </div>
-                                                <input type="text" value="" name="documento" class="form-control" placeholder="Documento" id="documento" required>
+                                                <input type="text" value="" name="documento" class="form-control"
+                                                    placeholder="Documento" id="documento" required>
                                             </div>
                                             <div class="input-group col-lg-6 col-md-12 mb-3">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
+                                                    <span class="input-group-text"><i
+                                                            class="fa-solid fa-id-card"></i></span>
                                                 </div>
-                                                <input type="text" value="" name="cpf" class="form-control" placeholder="CPF" id="cpf" required>
+                                                <input type="text" value="" name="cpf" class="form-control"
+                                                    placeholder="CPF" id="cpf" required>
                                             </div>
                                         </div>
 
@@ -218,7 +222,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <label for="sexouser" class="form-label">Sexo</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa-solid fa-person-half-dress"></i></span>
+                                                <span class="input-group-text"><i
+                                                        class="fa-solid fa-person-half-dress"></i></span>
                                             </div>
                                             <select class="form-control" name="sexouser" id="sexouser">
                                                 <option value="1">Masculino</option>
@@ -240,7 +245,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <label for="catuser" class="form-label">Categoria</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa-solid fa-user-graduate"></i></span>
+                                                <span class="input-group-text"><i
+                                                        class="fa-solid fa-user-graduate"></i></span>
                                             </div>
                                             <select class="form-control" name="catuser" id="catuser">
                                                 <option value="1">Aluno</option>
@@ -248,9 +254,64 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             </select>
                                         </div>
 
+                                        <!-- CEP -->
+                                        <label for="cepuser" class="form-label">CEP</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                            </div>
+                                            <input type="text" required name="cepuser" id="cepuser" class="form-control" placeholder="CEP">
+                                        </div>
+
+                                        <!-- Endereço -->
+                                        <label for="addressuser" class="form-label">Endereço</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                            </div>
+                                            <input type="text" required id="addressuser" name="addressuser" class="form-control" placeholder="Endereço">
+                                        </div>
+
+                                        <!-- Bairro -->
+                                        <label for="bairrouser" class="form-label">Bairro</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                            </div>
+                                            <input type="text" required id="bairrouser" name="bairrouser" class="form-control" placeholder="Bairro">
+                                        </div>
+
+                                        <!-- Bairro -->
+                                        <label for="cidadeuser" class="form-label">Bairro</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                            </div>
+                                            <input type="text" required id="cidadeuser" name="cidadeuser" class="form-control" placeholder="Cidade">
+                                        </div>
+
+                                        <!-- Numero -->
+                                        <label for="numerouser" class="form-label">Numero</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                            </div>
+                                            <input type="text" required id="numerouser" name="numerouser" class="form-control" placeholder="Numero">
+                                        </div>
+
+                                        <!-- Complemento -->
+                                        <label for="complementouser" class="form-label">Complemento</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                            </div>
+                                            <input type="text" required id="complementouser" name="complementouser" class="form-control"  placeholder="Complemento">
+                                        </div>
+
                                         <!-- Admin -->
                                         <div class="form-check">
-                                            <input type="checkbox" name="admin" class="form-check-input" value="1" id="useradmin">
+                                            <input type="checkbox" name="admin" class="form-check-input" value="1"
+                                                id="useradmin">
                                             <label class="form-check-label" for="useradmin">Admin</label>
                                         </div>
                                     </div>
@@ -307,8 +368,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         $(document).ready(function () {
             $('#telfixo').inputmask("(99) 9999-9999")
             $('#celuser').inputmask("(99) 99999-9999")
-            $('#cpf').inputmask("999.999.999-99")   
-            $('#documento').inputmask("99.999.999-9")   
+            $('#cpf').inputmask("999.999.999-99")
+            $('#documento').inputmask("99.999.999-9")
+            $('#cepuser').inputmask("99999-999")
         })
     </script>
 </body>

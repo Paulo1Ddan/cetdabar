@@ -1,5 +1,6 @@
 <?php
 
+use Class\Model\Matricula\Matricula;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Class\Model\User\User;
@@ -22,17 +23,19 @@ $app->get("/cetdabar/admin/users", function (Request $request, Response $respons
 
     $data = $users->getUsers();
 
-    for ($i = 0; $i < count($data); $i++) {
-        if ($data[$i]['status'] == 1) {
-            $data[$i]['status'] = "Ativo";
-        } else {
-            $data[$i]['status'] = "Inativo";
-        }
+    if (count($data) > 0) {
+        for ($i = 0; $i < count($data); $i++) {
+            if ($data[$i]['status'] == 1) {
+                $data[$i]['status'] = "Ativo";
+            } else {
+                $data[$i]['status'] = "Inativo";
+            }
 
-        if ($data[$i]['admin'] == 1) {
-            $data[$i]['admin'] = "Sim";
-        } else {
-            $data[$i]['admin'] = "Não";
+            if ($data[$i]['admin'] == 1) {
+                $data[$i]['admin'] = "Sim";
+            } else {
+                $data[$i]['admin'] = "Não";
+            }
         }
     }
 
@@ -79,6 +82,8 @@ $app->post("/cetdabar/admin/users/user-add", function (Request $request, Respons
 
     $user = new User();
 
+
+
     if ($user->validateDataCreateUserAdmin($_POST)) {
         if ($user->createUserAdmin($_POST)) {
             header("Location: /cetdabar/admin/users");
@@ -114,17 +119,22 @@ $app->get("/cetdabar/admin/users/{iduser}", function (Request $request, Response
 
     $data = $user->get($iduser);
 
-    if($data == 0){
+    if ($data == 0) {
         header("Location: /cetdabar/admin/users");
         exit();
     }
+
+    $dataaddress = $user->getAddrUser($iduser);
+
+    $_SESSION['iduseraddress'] = $dataaddress['iduser'];
 
     $page = new PageAdmin(array(
         "header" => false,
         "footer" => false,
         "data" => [
             "user" => $_SESSION['user'],
-            "userdata" => $data
+            "userdata" => $data,
+            "address" => $dataaddress
         ]
     ), "views/admin/users-admin");
 
@@ -132,7 +142,6 @@ $app->get("/cetdabar/admin/users/{iduser}", function (Request $request, Response
 
     return $response;
 });
-
 $app->post("/cetdabar/admin/users/{iduser}", function (Request $request, Response $response, $args) {
     $iduser = $args['iduser'];
 
@@ -154,6 +163,18 @@ $app->post("/cetdabar/admin/users/{iduser}", function (Request $request, Respons
         header("Location: /cetdabar/admin/users/$iduser");
         exit();
     }
+
+    return $response;
+});
+$app->post("/cetdabar/admin/users/address-user/{iduser}", function (Request $request, Response $response, $args) {
+
+    $iduser = $args['iduser'];
+
+    $user = new User();
+    $user->setData($_POST);
+    $user->updateAddress($_SESSION['iduseraddress']);
+    header("Location: /cetdabar/admin/users/$_SESSION[iduseraddress]");
+    exit();
 
     return $response;
 });

@@ -278,6 +278,87 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <!-- /.row -->
                 </div><!-- /.container-fluid -->
             </div>
+
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">Atualizar endereço</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <form method="POST" action="/cetdabar/admin/users/address-user/<?php echo htmlspecialchars( $userdata["iduser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
+                                    <div class="card-body">
+
+                                        <!-- CEP -->
+                                        <label for="cepuser" class="form-label">CEP</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                            </div>
+                                            <input type="text" required name="cepuser" id="cepuser" class="form-control" value="<?php echo htmlspecialchars( $address["cepuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="CEP">
+                                        </div>
+
+                                        <!-- Endereço -->
+                                        <label for="addressuser" class="form-label">Endereço</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                            </div>
+                                            <input type="text" required id="addressuser" name="addressuser" class="form-control" value="<?php echo htmlspecialchars( $address["addressuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Endereço">
+                                        </div>
+
+                                        <!-- Bairro -->
+                                        <label for="bairrouser" class="form-label">Bairro</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                            </div>
+                                            <input type="text" required id="bairrouser" name="bairrouser" class="form-control" value="<?php echo htmlspecialchars( $address["bairrouser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Email">
+                                        </div>
+
+                                        <!-- Endereço -->
+                                        <label for="cidadeuser" class="form-label">Cidade</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                            </div>
+                                            <input type="text" required id="cidadeuser" name="cidadeuser" class="form-control" value="<?php echo htmlspecialchars( $address["cidadeuser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Cidade">
+                                        </div>
+
+                                        <!-- Numero -->
+                                        <label for="numerouser" class="form-label">Numero</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                            </div>
+                                            <input type="text" required id="numerouser" name="numerouser" class="form-control" value="<?php echo htmlspecialchars( $address["numerouser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Número">
+                                        </div>
+
+                                        <!-- Complemento -->
+                                        <label for="complementouser" class="form-label">Complemento</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                            </div>
+                                            <input type="text" id="complementouser" name="complementouser" class="form-control" value="<?php echo htmlspecialchars( $address["complementouser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Complemento">
+                                        </div>
+
+                                    </div>
+                                    <!-- /.card-body -->
+                                    <div class="card-footer">
+                                        <button type="submit" class="btn btn-primary">Atualizar</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
@@ -320,6 +401,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             $('#celuser').inputmask("(99) 99999-9999")
             $('#cpf').inputmask("999.999.999-99")   
             $('#documento').inputmask("99.999.999-9")
+            $('#cepuser').inputmask("99999-999")
         })
     </script>
 </body>
